@@ -1,0 +1,1 @@
+DELETE FROM sessions where ID is not null;
