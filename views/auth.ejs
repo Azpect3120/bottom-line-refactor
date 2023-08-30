@@ -11,8 +11,8 @@
     class="flex items-center justify-center h-screen w-full"  
 >
 
-    <!-- Login Menu -->
-    <%- include("partials/loginMenu") %>
+    <!-- Auth Menu: Send user object from session -->
+    <%- include("partials/authMenu", { user }) %>
 
     <!-- Icon imports -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
