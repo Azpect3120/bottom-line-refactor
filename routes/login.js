@@ -43,6 +43,7 @@ router.post("/auth", (req, res) => {
             // Username and password match
             if (user) {
                 // Redirect to auth page
+                req.session.user = user;
                 res.status(301).render("auth", { user });
             } else {
                 // Redirect user to invalid page
@@ -55,7 +56,7 @@ router.post("/auth", (req, res) => {
 // Send user object & token
 // Called from authMenu.ejs to submit final auth request
 // Send a valid token from user input and use the secret from the session storage
-router.post("/auth", (req, res) => {
+router.post("/verify", (req, res) => {
     // Hold token and session
     const { token } = req.body;
     const secret = req.session.user.secret;
