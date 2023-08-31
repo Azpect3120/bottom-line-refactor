@@ -2,10 +2,9 @@
 const bodyParser = require("body-parser");
 const { Router, static } = require("express");
 const { Client } = require("pg");
-const { hashString, compareHash } = require("../public/javascript/hash");
-const { createSecret, validateToken } = require("../public/javascript/auth");
+const { compareHash } = require("../public/javascript/hash");
+const { validateToken } = require("../public/javascript/auth");
 const { database } = require("../public/javascript/database");
-const speakeasy = require("speakeasy");
 const User = require("../public/javascript/user");
 require("dotenv").config();
 
