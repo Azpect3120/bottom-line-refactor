@@ -1,5 +1,5 @@
 -- @block
-INSERT INTO users (username, password, permission) VALUES ('Azpect', '$2b$10$4Htx9Xdtfc.cM.g9ob/iQuB7EIuUk4bHH1LiXoNEpNfv5u8wQi9IW', 'Dev');
+INSERT INTO users (username, password, permission) VALUES ('Azpect', 'ea385c4489239eb598212f23c89eb52d:0664b1d824aabb4721513393aed153ab', 'Dev');
 
 -- @block
-INSERT INTO users (username, password, permission) VALUES ('ConnieH', '$2b$10$7AW7NCeSZUg90fC7zrQGEO74khEtPvuRnbrm0ixU5OkxJKjxD6PCC', 'Admin');
+INSERT INTO users (username, password, permission) VALUES ('ConnieH', 'd1d15c321c523cbcfe2c18f92168cb5b:78115351cc86f253e83a60a9f6183912', 'Admin');

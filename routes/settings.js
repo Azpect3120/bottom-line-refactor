@@ -3,6 +3,7 @@ const { Router, static } = require("express");
 const bodyParser = require("body-parser");
 const { Config } = require("pg");
 const { database } = require("../public/javascript/database");
+const { encryptString, decryptString } = require("../public/javascript/enc");
 
 // Create router
 const router = Router(); 

@@ -2,7 +2,7 @@
 const bodyParser = require("body-parser");
 const { Router, static } = require("express");
 const { Client } = require("pg");
-const { compareHash } = require("../public/javascript/hash");
+const { encryptString, decryptString } = require("../public/javascript/enc");
 const { validateToken } = require("../public/javascript/auth");
 const { database } = require("../public/javascript/database");
 const User = require("../public/javascript/user");
@@ -34,8 +34,8 @@ router.post("/auth", (req, res) => {
             // Find password matches
             let user;
             result.rows.forEach(row => {
-                if (compareHash(password, row.password)) {
-                    user = new User(row.id, row.username, null , row.permission, row.secret);
+                if (password === decryptString(row.password)) {
+                    user = new User(row.id, row.username, row.password , row.permission, row.secret);
                 }
             });
             
