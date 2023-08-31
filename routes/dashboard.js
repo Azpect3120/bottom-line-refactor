@@ -12,10 +12,19 @@ router.use(bodyParser.urlencoded({ extended: false }));
 
 // '/dash/' : load dashboard
 router.get("/", (req, res) => {
+    // Get user object from session
     const user = req.session.user;
-    const username = user.username;
-    const id = user.id;
-    res.status(200).render("dashboard", { username, id });
+
+    // Ensure a user is logged in
+    if (user) {
+        const username = user.username;
+        const id = user.id;
+        res.status(200).render("dashboard", { username, id });
+
+    // User is not found in the session: return to login page
+    } else {
+        res.status(301).redirect("/login");
+    }
 });
 
 // '/dash/logout' : logout of dashboard

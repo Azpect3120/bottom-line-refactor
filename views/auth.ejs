@@ -12,7 +12,12 @@
 >
 
     <!-- Auth Menu: Send user object from session -->
-    <%- include("partials/authMenu", { user }) %>
+    <%- include("partials/authMenu") %>
+
+    <!-- Handle error messages -->
+    <% if (typeof message !== "undefined") { %>
+        <%- include("partials/errorMessage", { message }) %>
+    <% } %>
 
     <!-- Icon imports -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

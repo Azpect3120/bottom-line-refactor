@@ -21,7 +21,7 @@ router.get("/", (req, res) => {
     res.status(200).render("login");
 });
 
-// '/login/auth' : Log the user in
+// '/login/auth' : Check for valid username and password, send user to the auth page if 2FA is enabled on the user
 router.post("/auth", (req, res) => {
     // Deconstruct body of the request
     const { username, password } = req.body;
@@ -42,12 +42,16 @@ router.post("/auth", (req, res) => {
             
             // Username and password match
             if (user) {
-                // Redirect to auth page
                 req.session.user = user;
-                res.status(301).render("auth", { user });
+                // Redirect to auth page if user has 2FA set up
+                if (user.secret != null) {
+                    res.status(200).render("auth");
+                } else {
+                    res.status(301).redirect("/dash");
+                } 
             } else {
                 // Redirect user to invalid page
-                res.status(401).send("INVALID USERNAME OR PASSWORD!!");
+                res.status(401).render("login", { message: "Invalid username or password" });
             }
         }
     });   
@@ -56,6 +60,7 @@ router.post("/auth", (req, res) => {
 // Send user object & token
 // Called from authMenu.ejs to submit final auth request
 // Send a valid token from user input and use the secret from the session storage
+// '/login/verify' : If the user has 2FA enabled, validate the 2FA code here 
 router.post("/verify", (req, res) => {
     // Hold token and session
     const { token } = req.body;
@@ -66,11 +71,11 @@ router.post("/verify", (req, res) => {
 
     // Handle auth
     if (authed) {
-        // Redirect user to dashboard and send cookies
+        // Redirect user to dashboard 
         res.status(301).redirect("/dash/");
     } else {
-        // Error
-        res.status(404).send("INVALID 2FA CODE!!");
+        // Invalid code
+        res.status(401).render("auth", { message: "Incorrect authentication code" });
     }
 });
 

@@ -1,7 +1,6 @@
 // Dependencies
 const bcrypt = require("bcrypt");
 
-// Hash a password
 /**
  * Creates a hash that can be used to validate against a string 
  * @param {string} string String to be later compared against
