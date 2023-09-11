@@ -7,3 +7,8 @@ CREATE TABLE IF NOT EXISTS users (
     secret VARCHAR(255),
     permission permission
 );
+
+CREATE TABLE IF NOT EXISTS clients (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(255) UNIQUE
+)

@@ -1,18 +1,26 @@
 // Dependencies
-const { Router, static } = require("express");
-const bodyParser = require("body-parser");
+const { Router } = require("express");
 const { Config } = require("pg");
-const { database } = require("../public/javascript/database");
-const { encryptString, decryptString } = require("../public/javascript/enc");
+const { database } = require("../model/database");
 
 // Create router
 const router = Router(); 
 
-// Middleware
-router.use(static("public"));
-router.use(bodyParser.urlencoded({ extended: false }));
+// '/' : Render the page
+router.get("/", (req, res) => {
+    // Get user from session
+    const user = req.session.user;
 
-// '/settings/changeUsername' : Changes the username of the logged in user
+    // Ensure a user is logged in
+    if (user) {
+        res.status(200).render("settings", { user });
+    } else {
+        res.status(302).redirect("/login");
+    }
+});
+
+
+// '/changeUsername' : Changes the username of the logged in user
 router.post("/changeUsername", (req, res) => {
     // Get user object stored in session
     const user = req.session.user;
@@ -40,7 +48,6 @@ router.post("/changeUsername", (req, res) => {
                 // Redirect back to settings page
                 res.status(301).redirect("/dash/settings");
             }
-            console.log(result);
         });
 
     // Inputted username does not match

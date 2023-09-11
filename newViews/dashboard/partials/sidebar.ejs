@@ -1,0 +1,264 @@
+<!-- Side Nav Bar -->
+<nav class="bg-x-theme-background border-r-[1px] border-x-theme-border w-1/6 h-full fixed flex items-center flex-col overflow-y-auto overflow-x-hidden">
+    <!-- Nav Header -->
+    <div class="text-x-theme-text-active hover:scale-105 text-2xl flex items-center w-4/5 transition-all py-8">
+        <ion-icon
+            name="server-sharp"
+            class="text-4xl text-x-theme-buttons">
+        </ion-icon>
+        <h1 class="px-4">
+            BLBS Dashboard
+        </h1>
+    </div>
+
+    <!-- Search Bar -->
+    <form 
+        action="/search"
+        method="GET"
+        class="w-4/5 bg-x-theme-popup-background border-x-theme-border border-[1px] rounded-md flex items-center justify-start my-4 mt-"
+    >
+        <button type="submit" class="h-full w-fit py-3 px-3 flex justify-center items-center">
+            <ion-icon
+                name="search-sharp"
+                class="text-x-theme-text-base hover:text-x-theme-text-active">
+            </ion-icon>
+        </button>
+        <input
+            type="text"
+            name="query"
+            placeholder="Search for..."
+            class="bg-transparent text-x-theme-text-active outline-none"
+        >
+    </form>
+
+    <!-- Home Page -->
+    <a href="/dash" class="text-x-theme-text-base hover:text-x-theme-text-active text-lg flex items-center w-4/5 transition-all py-4">
+        <ion-icon
+            name="home"
+            class="p-1">
+        </ion-icon>
+        <h1>
+            Home
+        </h1>
+        <!-- <ion-icon
+            name="chevron-forward-sharp"
+            class="ml-auto px-4">
+        </ion-icon> -->
+    </a>
+
+    <!-- Accounts -->
+    <a href="/dash/accounts" class="text-x-theme-text-base hover:text-x-theme-text-active text-lg flex items-center w-4/5 transition-all py-4">
+        <ion-icon
+            name="document-lock"
+            class="p-1">
+        </ion-icon>
+        <h1>
+            Accounts
+        </h1>
+        <!-- <ion-icon
+            name="chevron-forward-sharp"
+            class="ml-auto px-4">
+        </ion-icon> -->
+    </a>
+
+    <!-- Work Load -->
+    <div class="relative w-4/5">
+        <div class="text-x-theme-text-base hover:text-x-theme-text-active text-lg flex items-center w-full transition-all py-4 cursor-pointer" id="workload-dropdown-toggle">
+            <ion-icon
+                name="list"
+                class="p-1">
+            </ion-icon>
+            <h1>
+                Workload
+            </h1>
+            <ion-icon
+                name="chevron-forward-sharp"
+                id="workload-dropdown-arrow"
+                class="ml-auto px-4">
+            </ion-icon>
+        </div>
+        <!-- Dropdown -->
+        <div
+            id="workload-dropdown-content"
+            class="text-x-theme-text-base hidden transition-all duration-300 ease-in-out"
+        >
+            <!-- Active: bg-x-theme-background-active border-1-[6px] border-x-theme-buttons -->
+            <a href="#" class="block hover:text-x-theme-text-active hover:bg-x-theme-popup-background rounded-md p-2">BLBS</a>
+            <a href="#" class="block hover:text-x-theme-text-active hover:bg-x-theme-popup-background rounded-md p-2">Payroll Client</a>
+            <a href="#" class="block hover:text-x-theme-text-active hover:bg-x-theme-popup-background rounded-md p-2">Sales Tax</a>
+        </div>
+    </div>
+
+    <!-- Calender -->
+    <a href="#" class="text-x-theme-text-base hover:text-x-theme-text-active text-lg flex items-center w-4/5 transition-all py-4">
+        <ion-icon
+            name="calendar"
+            class="p-1">
+        </ion-icon>
+        <h1>
+            Calender
+        </h1>
+        <!-- <ion-icon
+            name="chevron-forward-sharp"
+            class="ml-auto px-4">
+        </ion-icon> -->
+    </a>
+
+    <!-- Time Card -->
+    <div class="relative w-4/5">
+        <div class="text-x-theme-text-base hover:text-x-theme-text-active text-lg flex items-center w-full transition-all py-4" id="timecard-dropdown-toggle">
+            <ion-icon
+                name="time"
+                class="p-1">
+            </ion-icon>
+            <h1>
+                Time Cards
+            </h1>
+            <ion-icon
+                name="chevron-forward-sharp"
+                id="timecard-dropdown-arrow"
+                class="ml-auto px-4">
+            </ion-icon>
+        </div>
+        <!-- Dropdown -->
+        <div
+            id="timecard-dropdown-content"
+            class="text-x-theme-text-base hidden transition-all duration-300 ease-in-out"
+        >
+            <!-- Active: bg-x-theme-background-active border-1-[6px] border-x-theme-buttons -->
+            <a href="#" class="block hover:text-x-theme-text-active hover:bg-x-theme-popup-background rounded-md p-2">User One</a>
+            <a href="#" class="block hover:text-x-theme-text-active hover:bg-x-theme-popup-background rounded-md p-2">User Two</a>
+            <a href="#" class="block hover:text-x-theme-text-active hover:bg-x-theme-popup-background rounded-md p-2">User Three</a>
+            <a href="#" class="block hover:text-x-theme-text-active hover:bg-x-theme-popup-background rounded-md p-2">User Four</a>
+            <a href="#" class="block hover:text-x-theme-text-active hover:bg-x-theme-popup-background rounded-md p-2">User Five</a>
+        </div>
+    </div>
+
+    <!-- Dev Portal -->
+    <a class="text-x-theme-text-base hover:text-x-theme-text-active text-lg flex items-center w-full transition-all py-8 px-8 my-8 border-y-[1px] border-x-theme-border">
+        <ion-icon
+            name="code-slash-sharp"
+            class="p-1">
+        </ion-icon>
+        <h1>
+            Dev Portal
+        </h1>
+        <!-- <ion-icon
+            name="chevron-forward-sharp"
+            class="ml-auto px-4">
+        </ion-icon> -->
+    </a>
+
+    <!-- Settings -->
+    <a class="text-x-theme-text-base hover:text-x-theme-text-active text-lg flex items-center w-4/5 transition-all py-4">
+        <ion-icon
+            name="settings-sharp"
+            class="p-1">
+        </ion-icon>
+        <h1>
+            Settings
+        </h1>
+        <!-- <ion-icon
+            name="chevron-forward-sharp"
+            class="ml-auto px-4">
+        </ion-icon> -->
+    </a>
+    
+    <!-- User -->
+    <div class="relative w-4/5">
+        <div class="text-x-theme-text-base hover:text-x-theme-text-active text-lg flex items-center w-full transition-all py-4" id="user-dropdown-toggle">
+            <ion-icon
+                name="person"
+                class="p-1">
+            </ion-icon>
+            <h1>
+                <%- user.username %>
+            </h1>
+            <ion-icon
+                name="chevron-forward-sharp"
+                id="user-dropdown-arrow"
+                class="ml-auto px-4">
+            </ion-icon>
+        </div>
+        <!-- Dropdown -->
+        <div
+            id="user-dropdown-content"
+            class="text-x-theme-text-base text-sm hidden transition-all duration-300 ease-in-out"
+        >
+            <div class="flex flex-col bg-x-theme-popup-background border-x-theme-border border-[1px] p-4 rounded-lg">
+                <a href="#" class="py-2 hover:text-x-theme-buttons flex items-center">
+                    <ion-icon name="person" class="px-2"></ion-icon>
+                    View profile
+                </a>
+                
+                <a href="#" class="py-2 hover:text-x-theme-buttons flex items-center">
+                    <ion-icon name="settings-sharp" class="px-2"></ion-icon>
+                    Profile settings
+                </a>
+                
+                <a href="#" class="py-2 hover:text-x-theme-buttons flex items-center">
+                    <ion-icon name="notifications" class="px-2"></ion-icon>
+                    Notifications
+                </a>
+                
+                <hr class="bg-x-theme-border w-full h-px border-0 my-2">
+
+                <a href="/dash/logout" class="py-2 text-x-theme-text-logout flex items-center group">
+                    <ion-icon name="log-out-outline" class="px-2 duration-300 transition-all group-hover:rotate-180"></ion-icon>
+                    Log out
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+</nav>
+
+<script>
+    const toggle = [
+        document.getElementById("workload-dropdown-toggle"), 
+        document.getElementById("timecard-dropdown-toggle"),
+        document.getElementById("user-dropdown-toggle")
+    ];
+
+    const content = [
+        document.getElementById("workload-dropdown-content"),
+        document.getElementById("timecard-dropdown-content"),
+        document.getElementById("user-dropdown-content")
+    ];
+
+    const arrow = [
+        document.getElementById("workload-dropdown-arrow"),
+        document.getElementById("timecard-dropdown-arrow"),
+        document.getElementById("user-dropdown-arrow")
+    ];
+
+    for (let i = 0; i < 3; i++) {
+        toggle[i].addEventListener("click", () => {
+            content[i].classList.toggle("hidden");
+            arrow[i].classList.toggle("rotate-90");
+        });
+    }
+</script>
+
+
+<!-- 
+
+    SET ACTIVE: text-x-theme-buttons && remove other text classes 
+    
+    Home
+    Accounts
+    Workloads
+        -
+        -
+        -
+    Calender
+    Time Cards
+        - User List
+    Dev Portal
+
+
+
+    Settings
+    User
+ -->

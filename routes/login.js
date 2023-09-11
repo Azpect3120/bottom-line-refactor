@@ -1,26 +1,21 @@
 // Dependencies
-const bodyParser = require("body-parser");
-const { Router, static } = require("express");
+const { Router } = require("express");
 const { Client } = require("pg");
-const { encryptString, decryptString } = require("../public/javascript/enc");
-const { validateToken } = require("../public/javascript/auth");
-const { database } = require("../public/javascript/database");
-const User = require("../public/javascript/user");
+const { decryptString } = require("../model/enc");
+const { validateToken } = require("../model/auth");
+const { database } = require("../model/database");
+const User = require("../model/user");
 require("dotenv").config();
 
 // Create router
 const router = Router();
 
-// Middleware
-router.use(static("public"));
-router.use(bodyParser.urlencoded({ extended: false }));
-
 // '/login/' : Load page
 router.get("/", (req, res) => {
-    res.status(200).render("login");
+    res.status(200).render("login/menu");
 });
 
-// '/login/auth' : Check for valid username and password, send user to the auth page if 2FA is enabled on the user
+// '/auth' : Check for valid username and password, send user to the auth page if 2FA is enabled on the user
 router.post("/auth", (req, res) => {
     // Deconstruct body of the request
     const { username, password } = req.body;
@@ -44,13 +39,13 @@ router.post("/auth", (req, res) => {
                 req.session.user = user;
                 // Redirect to auth page if user has 2FA set up
                 if (user.secret != null) {
-                    res.status(200).render("auth");
+                    res.status(200).render("login/auth");
                 } else {
                     res.status(301).redirect("/dash");
                 } 
             } else {
                 // Redirect user to invalid page
-                res.status(401).render("login", { message: "Invalid username or password" });
+                res.status(401).render("login/menu", { message: "Invalid username or password" });
             }
         }
     });   
@@ -59,7 +54,7 @@ router.post("/auth", (req, res) => {
 // Send user object & token
 // Called from authMenu.ejs to submit final auth request
 // Send a valid token from user input and use the secret from the session storage
-// '/login/verify' : If the user has 2FA enabled, validate the 2FA code here 
+// '/verify' : If the user has 2FA enabled, validate the 2FA code here 
 router.post("/verify", (req, res) => {
     // Hold token and session
     const { token } = req.body;
@@ -74,7 +69,7 @@ router.post("/verify", (req, res) => {
         res.status(301).redirect("/dash/");
     } else {
         // Invalid code
-        res.status(401).render("auth", { message: "Incorrect authentication code" });
+        res.status(401).render("login/auth", { message: "Incorrect authentication code" });
     }
 });
 

@@ -23,11 +23,6 @@ function validateToken (token, secret) {
     });
 }
 
-// const sec = "PFNVUTLWNV4V4QBSKZUW6PBVIZFS6KKWNZ3UOSKIO5CEOOJZNRIQ";
-// console.log(sec);
-// const token = 775634;
-
-// console.log(validateToken(token, sec));
 
 exports.createSecret = createSecret;
 exports.validateToken = validateToken;
