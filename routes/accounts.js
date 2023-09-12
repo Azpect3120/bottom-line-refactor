@@ -12,7 +12,10 @@ router.use(bodyParser.urlencoded({ extended: false }));
 
 // Routes
 // '/' : Render the accounts page and load the data
-router.get("/", (req, res) => {
+router.get("/accounts", (req, res) => {
+    // Get queries from the request
+    const searchQuery = req.query.search;
+
     // Get user from session
     const user = req.session.user;
     
@@ -26,7 +29,13 @@ router.get("/", (req, res) => {
             res.status(500).render("dashboard/accounts", { user, clients: [] });
         } else {
             // Get clients from query
-            const clients = result.rows;
+            let clients = result.rows;
+
+            // Sort clients
+            clients.sort((a, b) => a.name.localeCompare(b.name));
+
+            // Filter clients by search
+            if (searchQuery) clients = clients.filter(client => client.name.includes(searchQuery));
     
             // Ensure a user is logged in
             if (user) {
@@ -36,7 +45,6 @@ router.get("/", (req, res) => {
             }
         }
     });
-
 });
 
 

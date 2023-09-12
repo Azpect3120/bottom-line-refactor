@@ -22,9 +22,11 @@ module.exports = {
 
         "x-theme-background": "#080F25",
         "x-theme-popup-background": "#101935",
+        "x-theme-mini-popup-background": "#212C4D",
         "x-theme-background-active": "#212C4D",
         "x-theme-border": "#37446B",
         "x-theme-buttons": "#6C72FF",
+        "x-theme-buttons-active": "#212C4D",
         "x-theme-hyperlink": "#5A4390",
         "x-theme-text-base": "#AEB9E1",
         "x-theme-text-active": "#FFFFFF",

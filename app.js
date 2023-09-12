@@ -37,7 +37,7 @@ const accountRoutes = require("./routes/accounts");
 app.use("/login", loginRoutes);
 app.use("/dash", dashboardRoutes);
 app.use("/dash/settings", settingsRoutes);
-app.use("/dash/accounts", accountRoutes);
+app.use("/dash", accountRoutes);
 
 
 // Redirect from blank to login page
