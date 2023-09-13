@@ -17,48 +17,42 @@
         <!-- Page Content -->
         <div class="w-5/6 ml-auto h-full flex justify-center items-center">
 
-            <!-- Client List Full Body -->
-            <div class="w-2/3 h-2/3 bg-x-theme-popup-background border border-x-theme-border rounded-xl">
+            <!-- Account List Full Body -->
+            <div class="w-5/6 h-2/3 bg-x-theme-popup-background border border-x-theme-border rounded-xl">
 
                 <!-- Header -->
                 <div class="h-1/6 w-full flex items-center px-8">
-                    <h1 class="text-2xl text-x-theme-text-active"> Clients </h1>
+                    <h1 class="text-2xl text-x-theme-text-active w-full"> <%- client_name %> </h1>
 
-                    <form action="/dash/accounts" method="GET" class="w-full flex justify-end">
-                        <input
-                            type="text"
-                            name="search"
-                            class="bg-x-theme-mini-popup-background border border-x-theme-border text-x-theme-text-base px-2 py-1.5 rounded-md text-xs outline-none w-1/3"
-                            placeholder="Search for client..."
-                        >
-                            
-                        <button type="submit" class="text-xs bg-x-theme-buttons text-x-theme-text-active mx-4 px-2 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Search </buttn>
-                    </form>
+                    <a href="/dash/accounts" class="text-xs bg-x-theme-buttons text-x-theme-text-active mx-4 px-3 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Back </a>
                 </div>
 
-                <!-- Client Table -->
+                <!-- Account Table -->
                 <div class="h-5/6 rounded-b-md overflow-y-auto pb-4">
-                    <table class="w-full">
-                        <tr class="text-x-theme-text-base">
-                            <th class="text-left px-8 pb-4"> Client Name </th>
-                            <th class="pb-4"> Actions</th>
+                    <table class="w-full px-2">
+                        <tr class="text-x-theme-text-base text-left">
+                            <th class="pb-4 pl-8"> Account </th>
+                            <th class="pb-4"> Username </th>
+                            <th class="pb-4"> Password </th>
+                            <th class="pb-4"> Notes </th>
+                            <th class="pb-4 text-center"> Actions </th>
                         </tr>
-                        <% for (const client of clients) { %>
+                        <% for (const account of accounts) { %>
                             <tr class="text-x-theme-text-base border-y border-x-theme-border hover:bg-x-theme-mini-popup-background">
-                                <td class="px-8 py-2"> <%= client.name %> </td>
-                                <td class="px-8 py-2 text-center text-xl">
-                                    <a href="#"><ion-icon name="eye" class="p-1 hover:text-x-theme-text-active transition-all" title="View accounts"></ion-icon></a>
-                                    <a href="#"><ion-icon name="pencil" class="p-1 hover:text-x-theme-text-active transition-all" title="Edit client"></ion-icon></a>
-                                    <a href="#"><ion-icon name="trash" class="p-1 hover:text-x-theme-text-logout transition-all" title="Remove client"></ion-icon></a>
+                                <td class="px-8 py-2"> <%= account.name %> </td>
+                                <td class="py-2"> <%= account.username %> </td>
+                                <td class="py-2"> <%= account.password %> </td>
+                                <td class="py-2"> <%= account.notes %> </td>
+                                <td class="py-2 text-center text-xl">
+                                    <a href="/dash/accounts/edit?id=<%- account.id %>"><ion-icon name="pencil" class="p-1 hover:text-x-theme-text-active transition-all" title="Edit account"></ion-icon></a>
+                                    <a href="#"><ion-icon name="trash" class="p-1 hover:text-x-theme-text-logout transition-all" title="Remove account"></ion-icon></a>
                                 </td>
                             </tr>
                         <% } %>
                     </table>
                 </div>
-
             </div>
         </div>
-
     </div>
 
     <!-- Icon imports -->
