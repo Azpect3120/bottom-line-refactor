@@ -64,8 +64,8 @@ router.get('/accounts/view', (req, res) => {
             console.error("Error fetching account list", err);
             res.status(500).redirect("/dash/accounts");
         } else {
+            // Collect list of accounts
             const accounts = [];
-
             for (const row of result.rows) {
                 accounts.push({
                     id: row.id,
