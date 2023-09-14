@@ -58,7 +58,7 @@ router.get('/accounts/view', (req, res) => {
     const user = req.session.user;
 
     // Get accounts
-    database.query("SELECT * FROM accounts WHERE client_id = $1", [ client_id ], (err, result) => {
+    database.query("SELECT * FROM accounts WHERE client_id = $1;", [ client_id ], (err, result) => {
         // Error
         if (err) {
             console.error("Error fetching account list", err);
@@ -80,7 +80,7 @@ router.get('/accounts/view', (req, res) => {
             accounts.sort((a, b) => a.name.localeCompare(b.name));
             
             // Get client name
-            database.query("SELECT name FROM clients WHERE id = $1", [ client_id ], (err, result) => {
+            database.query("SELECT name FROM clients WHERE id = $1;", [ client_id ], (err, result) => {
                 // Error
                 if (err) {
                     console.error("Error fetching client name", err);
@@ -107,7 +107,7 @@ router.post("/accounts/edit/client", (req, res) => {
     const new_client_name = req.body.client_name;
 
     // SQL
-    const query = "UPDATE clients SET name = $1 WHERE id = $2";
+    const query = "UPDATE clients SET name = $1 WHERE id = $2;";
     const args = [ new_client_name, client_id ];
 
     // Update database
@@ -134,7 +134,7 @@ router.post("/accounts/edit/account", (req, res) => {
     };
 
     // SQL
-    const query = "UPDATE accounts SET account_name = $1, account_user = $2, account_password = $3, account_notes = $4 WHERE id = $5";
+    const query = "UPDATE accounts SET account_name = $1, account_user = $2, account_password = $3, account_notes = $4 WHERE id = $5;";
     const args = [ account.name, account.user, account.password, account.notes, account.id ];
 
     // Update database
@@ -142,6 +142,32 @@ router.post("/accounts/edit/account", (req, res) => {
         updateDatabase(req.session.user.id, "accounts", query, args, result);
         if (err) {
             console.error("Error updating account details", err);
+            res.status(500).redirect(`/dash/accounts/view?client=${req.body.client_id}`);
+        } else {
+            res.status(301).redirect(`/dash/accounts/view?client=${req.body.client_id}`);
+        }
+    });
+});
+
+// '/accounts/add/account' : Add an account (name, user, password, notes)
+router.post("/accounts/add/account", (req, res) => {
+    // Get body from request
+    const account = {
+        name: req.body.name,
+        user: req.body.user,
+        password: encryptString(req.body.password),
+        notes: req.body.notes
+    };
+
+    // SQL
+    const query = "INSERT INTO accounts (client_id, account_name, account_user, account_password, account_notes) VALUES ($1, $2, $3, $4, $5);";
+    const args = [ req.body.client_id, account.name, account.user, account.password, account.notes ];
+
+    // Update database
+    database.query(query, args, (err, result) => {
+        updateDatabase(req.session.user.id, "accounts", query, args, result);
+        if (err) {
+            console.error("Error adding account to client", err);
             res.status(500).redirect(`/dash/accounts/view?client=${req.body.client_id}`);
         } else {
             res.status(301).redirect(`/dash/accounts/view?client=${req.body.client_id}`);
