@@ -1,12 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: "class",
+  darkMode: "media",
   content: [
-    "./views/*.{html,ejs,js}",
-    "./views/partials/*.{html,ejs,js}",
-    "./public/**/*.{html,ejs,js}",
-    "./newViews/**/*.{html,ejs,js}",
-    "./newViews/**/**/*.{html,ejs,js}"
+    "./views/**/*.{html,ejs,js}",
+    "./views/**/**/*.{html,ejs,js}"
   ],
   theme: {
     extend: {

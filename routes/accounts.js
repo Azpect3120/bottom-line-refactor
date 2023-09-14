@@ -2,7 +2,7 @@
 const bodyParser = require("body-parser");
 const { Router, static } = require("express");
 const { database } = require("../model/database");
-const { decryptString } = require("../model/enc");
+const { encryptString, decryptString } = require("../model/enc");
 const { restart } = require("nodemon");
 
 // Create router
@@ -57,9 +57,8 @@ router.get('/accounts/view', (req, res) => {
     // Get user from session
     const user = req.session.user;
 
-    const sql = `SELECT * FROM accounts WHERE client_id = '${client_id}'`;
-
-    database.query(sql, (err, result) => {
+    // Get accounts
+    database.query("SELECT * FROM accounts WHERE client_id = $1", [ client_id ], (err, result) => {
         // Error
         if (err) {
             console.error("Error fetching account list", err);
@@ -68,7 +67,6 @@ router.get('/accounts/view', (req, res) => {
             const accounts = [];
 
             for (const row of result.rows) {
-                console.log(row);
                 accounts.push({
                     id: row.id,
                     name: row.account_name,
@@ -78,10 +76,11 @@ router.get('/accounts/view', (req, res) => {
                 });
             }
 
+            // Sort accounts
+            accounts.sort((a, b) => a.name.localeCompare(b.name));
+            
             // Get client name
-            const sql2 = `SELECT name FROM clients WHERE id = '${client_id}'`;
-
-            database.query(sql2, (err, result) => {
+            database.query("SELECT name FROM clients WHERE id = $1", [ client_id ], (err, result) => {
                 // Error
                 if (err) {
                     console.error("Error fetching client name", err);
@@ -90,7 +89,7 @@ router.get('/accounts/view', (req, res) => {
                     if (result.rows.length > 0) {
                         if (user) {
                             // Finally, render page
-                            res.status(200).render("dashboard/accounts", { user, accounts, client_name: result.rows[0].name });
+                            res.status(200).render("dashboard/accounts", { user, accounts, client_name: result.rows[0].name, client_id });
                         } else {
                             res.status(302).redirect("/login");
                         }
@@ -101,14 +100,48 @@ router.get('/accounts/view', (req, res) => {
     });
 });
 
-// '/accounts/edit?id' : Edit an account
-router.get("/accounts/edit", (req, res) => {
-    const account_id =req.query.id;
+// '/accounts/edit/client' : Edit a client (name)
+router.post("/accounts/edit/client", (req, res) => {
+    // Get body from request
+    const client_id = req.body.client_id;
+    const new_client_name = req.body.client_name;
 
-    res.status(200).send(account_id);
+    // Update database
+    database.query("UPDATE clients SET name = $1 WHERE id = $2", [ new_client_name, client_id ], (err, result) => {
+        if (err) {
+            console.error("Error updating client name", err);
+            res.status(500).redirect("/dash/accounts");
+        } else {
+            res.status(301).redirect("/dash/accounts");
+        }
+    });
+}); 
 
+// '/accounts/edit/account' : Edit an account (name, user, password, notes)
+router.post("/accounts/edit/account", (req, res) => {
+    // Get body from request
+    const account = {
+        id: req.body.id,
+        name: req.body.account_name,
+        user: req.body.account_user,
+        password: encryptString(req.body.account_password),
+        notes: req.body.account_notes
+    };
+
+    // Update database
+    database.query(
+        "UPDATE accounts SET account_name = $1, account_user = $2, account_password = $3, account_notes = $4 WHERE id = $5", 
+        [ account.name, account.user, account.password, account.notes, account.id ],
+        (err, result) => {
+            console.log(result);
+            if (err) {
+                console.error("Error updating account details", err);
+                res.status(500).redirect(`/dash/accounts/view?client=${req.body.client_id}`);
+            } else {
+                res.status(301).redirect(`/dash/accounts/view?client=${req.body.client_id}`);
+            }
+        });
 });
-
 
 // Export router
 module.exports = router;

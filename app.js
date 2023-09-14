@@ -8,8 +8,7 @@ require("dotenv").config();
 
 // Views & Template Engines
 app.set("view engine", "ejs");
-// app.set("views", "views");
-app.set("views", "newViews");
+app.set("views", "views");
 
 
 // Middleware

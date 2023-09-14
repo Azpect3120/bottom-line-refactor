@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/main.css">
+    <title>BLBS: Accounts</title>
+</head>
+<body>
+
+    <!-- Body -->
+    <div class="w-full h-screen bg-x-theme-background">
+
+        <!-- Sidebar -->
+        <%- include("partials/sidebar", { user }) %>
+
+        <!-- Page Content -->
+        <div class="w-5/6 ml-auto h-full flex justify-center items-center">
+
+            <!-- Account List Full Body -->
+            <div class="w-5/6 h-2/3 bg-x-theme-popup-background border border-x-theme-border rounded-xl">
+
+                <!-- Header -->
+                <div class="h-1/6 w-full flex items-center px-8">
+                    <h1 class="text-2xl text-x-theme-text-active w-full"> <%- client_name %> </h1>
+
+                    <a href="#" title="Add an account to this client" class="text-xs bg-x-theme-buttons text-x-theme-text-active px-3 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Add </a>
+                    <a href="/dash/accounts" title="Back to client list" class="text-xs bg-x-theme-buttons text-x-theme-text-active mx-4 px-3 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Back </a>
+                </div>
+
+                <!-- Account Table -->
+                <div class="h-5/6 rounded-b-md overflow-y-auto pb-4">
+                    <table class="w-full px-2">
+                        <tr class="text-x-theme-text-base text-left">
+                            <th class="pb-4 pl-8"> Account </th>
+                            <th class="pb-4"> Username </th>
+                            <th class="pb-4"> Password </th>
+                            <th class="pb-4"> Notes </th>
+                            <th class="pb-4 text-center"> Actions </th>
+                        </tr>
+                        <% for (const account of accounts) { %>
+                            <tr id="<%- account.id %>" class="text-x-theme-text-base border-y border-x-theme-border hover:bg-x-theme-mini-popup-background">
+                                <form action="/dash/accounts/edit/account" method="POST">
+                                    <td class="pl-8 py-2">
+                                        <input type="text" disabled name="account_name" value="<%= account.name %>" class="overflow-x-auto bg-transparent outline-none rounded-md px-2 py-1 w-full">
+                                    </td>
+                                    
+                                    <td class="py-2">
+                                        <input type="text" disabled name="account_user" value="<%= account.username %>" class="overflow-x-auto bg-transparent outline-none rounded-md px-2 py-1 w-full">
+                                    </td>
+                                    
+                                    <td class="py-2">
+                                        <input type="text" disabled name="account_password" value="<%= account.password %>" class="overflow-x-auto bg-transparent outline-none rounded-md px-2 py-1 w-full">
+                                    </td>
+                                    
+                                    <td class="py-2">
+                                        <input type="text" disabled name="account_notes" value="<%= account.notes %>" class="overflow-x-auto bg-transparent outline-none rounded-md px-2 py-1 w-full">
+                                    </td>
+                                    
+                                    <td class="py-2 text-center text-xl">
+                                        <a onclick="toggleAccountEdit('<%- account.id %>')">
+                                            <ion-icon name="pencil" class="p-1 hover:text-x-theme-text-active transition-all" title="Edit account"></ion-icon>
+                                        </a>
+                                        <a href="#">
+                                            <ion-icon name="trash" class="p-1 hover:text-x-theme-text-logout transition-all" title="Remove account"></ion-icon>
+                                        </a>
+                                    </td>
+                                    
+                                    <input type="hidden" disabled name="client_id" value="<%- client_id %>">
+                                    <input type="hidden" disabled name="id" value="<%- account.id %>">
+                                    <button type="submit" class="hidden"></button>
+                                </form>
+                            </tr>
+                        <% } %>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleAccountEdit (id)
+        {
+            const elements = document.getElementById(id).getElementsByTagName("input");
+            // const button = document.getElementById(id).getElementsByTagName("button")[0];
+            
+            for (let i = 0; i < elements.length; i++) {
+                const element = elements[i];
+                if (element.hasAttribute("disabled")) {
+                    element.removeAttribute("disabled");
+                    element.classList.add("bg-x-theme-border");
+                    // button.classList.remove("hidden");
+                } else {
+                    element.setAttribute("disabled", "disabled");
+                    element.classList.remove("bg-x-theme-border");
+                    // button.classList.add("hidden");
+                }
+            }
+        }
+    </script>
+
+    <!-- Icon imports -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

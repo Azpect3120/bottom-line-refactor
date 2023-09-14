@@ -41,14 +41,25 @@
                     <table class="w-full">
                         <tr class="text-x-theme-text-base">
                             <th class="text-left px-8 pb-4"> Client Name </th>
-                            <th class="pb-4"> Actions</th>
+                            <th class="pb-4 text-center w-1/5"> Actions</th>
                         </tr>
                         <% for (const client of clients) { %>
-                            <tr class="text-x-theme-text-base border-y border-x-theme-border hover:bg-x-theme-mini-popup-background">
-                                <td class="px-8 py-2"> <%= client.name %> </td>
+                            <tr id="<%- client.id %>" class="text-x-theme-text-base border-y border-x-theme-border hover:bg-x-theme-mini-popup-background">
+                                <td class="px-8 py-2">
+                                    <form action="/dash/accounts/edit/client" method="POST">
+                                        <input type="hidden" name="client_id" value="<%- client.id %>">
+                                        <input
+                                            type="text"
+                                            name="client_name"
+                                            disabled
+                                            value="<%- client.name %>"
+                                            class="bg-transparent outline-none w-full px-2 py-1 rounded-md"    
+                                        >
+                                    </form>
+                                </td>
                                 <td class="px-8 py-2 text-center text-xl">
                                     <a href="/dash/accounts/view?client=<%- client.id %>"><ion-icon name="eye" class="p-1 hover:text-x-theme-text-active transition-all" title="View accounts"></ion-icon></a>
-                                    <a href="#"><ion-icon name="pencil" class="p-1 hover:text-x-theme-text-active transition-all" title="Edit client"></ion-icon></a>
+                                    <button onclick="toggleClientEdit('<%- client.id %>');"><ion-icon name="pencil" class="p-1 hover:text-x-theme-text-active transition-all" title="Edit client"></ion-icon></button>
                                     <a href="#"><ion-icon name="trash" class="p-1 hover:text-x-theme-text-logout transition-all" title="Remove client"></ion-icon></a>
                                 </td>
                             </tr>
@@ -60,7 +71,18 @@
     </div>
 
     <script>
-
+        function toggleClientEdit (id)
+        {
+            const element = document.getElementById(id).getElementsByTagName("td")[0].getElementsByTagName("input")[1];
+            if (element.hasAttribute("disabled")) {
+                element.removeAttribute("disabled");
+                element.classList.add("bg-x-theme-border")
+            } else {
+                element.setAttribute("disabled", "disabled");
+                element.classList.remove("bg-x-theme-border")
+            }
+            console.log(element);
+        }
     </script>
 
     <!-- Icon imports -->
