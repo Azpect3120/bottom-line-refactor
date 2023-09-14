@@ -2,7 +2,7 @@ class User
 {
     /**
      * Creates a user object 
-     * @param {number} id 
+     * @param {string} id 
      * @param {string} username 
      * @param {string} password 
      * @param {string} permission 

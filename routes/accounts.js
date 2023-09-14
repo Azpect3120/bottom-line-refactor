@@ -1,7 +1,7 @@
 // Dependencies
 const bodyParser = require("body-parser");
 const { Router, static } = require("express");
-const { database } = require("../model/database");
+const { database, updateDatabase } = require("../model/database");
 const { encryptString, decryptString } = require("../model/enc");
 const { restart } = require("nodemon");
 
@@ -106,8 +106,13 @@ router.post("/accounts/edit/client", (req, res) => {
     const client_id = req.body.client_id;
     const new_client_name = req.body.client_name;
 
+    // SQL
+    const query = "UPDATE clients SET name = $1 WHERE id = $2";
+    const args = [ new_client_name, client_id ];
+
     // Update database
-    database.query("UPDATE clients SET name = $1 WHERE id = $2", [ new_client_name, client_id ], (err, result) => {
+    database.query(query, args, (err, result) => {
+        updateDatabase(req.session.user.id, "clients", query, args, result);
         if (err) {
             console.error("Error updating client name", err);
             res.status(500).redirect("/dash/accounts");
@@ -128,19 +133,20 @@ router.post("/accounts/edit/account", (req, res) => {
         notes: req.body.account_notes
     };
 
+    // SQL
+    const query = "UPDATE accounts SET account_name = $1, account_user = $2, account_password = $3, account_notes = $4 WHERE id = $5";
+    const args = [ account.name, account.user, account.password, account.notes, account.id ];
+
     // Update database
-    database.query(
-        "UPDATE accounts SET account_name = $1, account_user = $2, account_password = $3, account_notes = $4 WHERE id = $5", 
-        [ account.name, account.user, account.password, account.notes, account.id ],
-        (err, result) => {
-            console.log(result);
-            if (err) {
-                console.error("Error updating account details", err);
-                res.status(500).redirect(`/dash/accounts/view?client=${req.body.client_id}`);
-            } else {
-                res.status(301).redirect(`/dash/accounts/view?client=${req.body.client_id}`);
-            }
-        });
+    database.query(query, args, (err, result) => {
+        updateDatabase(req.session.user.id, "accounts", query, args, result);
+        if (err) {
+            console.error("Error updating account details", err);
+            res.status(500).redirect(`/dash/accounts/view?client=${req.body.client_id}`);
+        } else {
+            res.status(301).redirect(`/dash/accounts/view?client=${req.body.client_id}`);
+        }
+    });
 });
 
 // Export router

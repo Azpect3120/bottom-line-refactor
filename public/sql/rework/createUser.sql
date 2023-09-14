@@ -8,4 +8,4 @@ INSERT INTO users (username, password, permission) VALUES ('ConnieH', 'd1d15c321
 -- @block
 UPDATE users 
 SET secret = null 
-WHERE id = 1;
+WHERE id = id;
