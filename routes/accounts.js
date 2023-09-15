@@ -3,7 +3,6 @@ const bodyParser = require("body-parser");
 const { Router, static } = require("express");
 const { database, updateDatabase } = require("../model/database");
 const { encryptString, decryptString } = require("../model/enc");
-const { restart } = require("nodemon");
 
 // Create router
 const router = Router();

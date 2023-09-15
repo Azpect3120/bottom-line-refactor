@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/main.css">
+    <title>BLBS: Dev Portal </title>
+</head>
+<body>
+
+    <!-- Body -->
+    <div class="w-full h-screen bg-x-theme-background">
+
+        <!-- Sidebar -->
+        <%- include("partials/sidebar", { user }) %>
+
+        <!-- Page Content -->
+        <div class="w-5/6 ml-auto h-full flex justify-center items-center">
+
+            <!-- Client List Full Body -->
+            <div class="w-4/5 h-4/5 bg-x-theme-popup-background border border-x-theme-border rounded-xl">
+
+                <!-- Header -->
+                <div class="h-1/6 w-full flex items-center px-8">
+                    <h1 class="text-2xl text-x-theme-text-active w-full"> Update Log </h1>
+
+                    <form action="/dash/accounts" method="GET" class="w-full flex justify-end">
+                        <input
+                            type="text"
+                            name="search"
+                            class="bg-x-theme-mini-popup-background border border-x-theme-border text-x-theme-text-base px-2 py-1.5 rounded-md text-xs outline-none w-2/3"
+                            placeholder="Search for update..."
+                        >
+                            
+                        <button type="submit" class="text-xs bg-x-theme-buttons text-x-theme-text-active mx-4 px-2 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Search </buttn>
+                    </form>
+                </div>
+
+                <!-- Client Table -->
+                <div class="h-5/6 rounded-b-md overflow-y-auto pb-4">
+                    <table class="w-full">
+                        <tr class="text-x-theme-text-base text-left">
+                            <th class="pl-8 pb-4"> Table Modified </th>
+                            <th class="pb-4"> Action </th>
+                            <th class="pb-4">Rows Affected</th>
+                            <th class="pb-4">Statement</th>
+                            <th class="pb-4">Arguments</th>
+                            <th class="pb-4 pr-8">Timestamp</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleClientEdit (id)
+        {
+            const element = document.getElementById(id).getElementsByTagName("td")[0].getElementsByTagName("input")[1];
+            if (element.hasAttribute("disabled")) {
+                element.removeAttribute("disabled");
+                element.classList.add("bg-x-theme-border")
+            } else {
+                element.setAttribute("disabled", "disabled");
+                element.classList.remove("bg-x-theme-border")
+            }
+            console.log(element);
+        }
+    </script>
+
+    <!-- Icon imports -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

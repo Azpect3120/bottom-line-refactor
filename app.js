@@ -28,16 +28,15 @@ app.use(session({
 // Import external routes
 const loginRoutes = require("./routes/login");
 const dashboardRoutes = require("./routes/dashboard");
-const settingsRoutes = require("./routes/settings");
 const accountRoutes = require("./routes/accounts");
+const devPortalRoutes = require("./routes/devPortal");
 
 
 // Mount external routes
 app.use("/login", loginRoutes);
 app.use("/dash", dashboardRoutes);
-app.use("/dash/settings", settingsRoutes);
 app.use("/dash", accountRoutes);
-
+app.use("/dash", devPortalRoutes);
 
 // Redirect from blank to login page
 app.get("/", (req, res) => {
