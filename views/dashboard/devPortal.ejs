@@ -42,11 +42,34 @@
                         <tr class="text-x-theme-text-base text-left">
                             <th class="pl-8 pb-4"> Table Modified </th>
                             <th class="pb-4"> Action </th>
-                            <th class="pb-4">Rows Affected</th>
+                            <!-- <th class="pb-4">Rows Affected</th>
                             <th class="pb-4">Statement</th>
-                            <th class="pb-4">Arguments</th>
+                            <th class="pb-4">Arguments</th> -->
                             <th class="pb-4 pr-8">Timestamp</th>
                         </tr>
+                        <% for (const update of updates) { %>
+                            <tr>
+                                <td>
+                                    <%- update.table_name %>
+                                </td>
+                                <td>
+                                    <%- update.action %>
+                                </td>
+                                <!-- <td>
+                                    <%#- update.row_count %>
+                                </td>
+                                <td>
+                                    <%#- update.statement %>
+                                </td>
+                                <td>
+                                    <%#- update.arguments %>
+                                </td> -->
+                                <td>
+                                    <%- update.timestamp %>
+                                </td>
+
+                            </tr>
+                        <% } %>
                     </table>
                 </div>
             </div>

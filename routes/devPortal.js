@@ -32,10 +32,11 @@ router.get("/dev-portal", (req, res) => {
                 } else {
                     // Get update list from database
                     let updates = result.rows;
-                    
+
                     console.log(updates);
                     
 
+                    // Render the page with the updates
                     res.status(200).render("dashboard/devPortal", { user, updates });
                 } 
             });
