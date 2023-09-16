@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/main.css">
+    <title>BLBS: Dev Portal </title>
+</head>
+<body>
+
+    <!-- Body -->
+    <div class="w-full h-screen bg-x-theme-background">
+
+        <!-- Sidebar -->
+        <%- include("partials/sidebar", { user }) %>
+
+        <!-- Page Content -->
+        <div class="w-5/6 ml-auto h-full flex flex-col justify-center items-center">
+
+            <!-- Header -->
+            <div class="w-3/4 h-20 flex items-center justify-between pl-14 pr-8">
+                <h1 class="text-2xl text-x-theme-text-active">
+                    View Update Details
+                </h1>
+                <a href="/dash/dev-portal" class="text-sm bg-x-theme-buttons text-x-theme-text-active mx-4 px-3 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Back </a>
+            </div>
+
+            <!-- Top Container -->
+            <div class="w-3/4 h-1/5 my-2 flex justify-evenly items-center"> 
+                <div class="bg-x-theme-popup-background border border-x-theme-border rounded-md w-1/5 h-2/3 flex flex-col justify-evenly">
+                    <p class="text-x-theme-text-base text-md px-8"> User </p>
+                    <h1 class="text-x-theme-text-active text-2xl px-8"> <%- update.username %> </h1>
+                </div> 
+                <div class="bg-x-theme-popup-background border border-x-theme-border rounded-md w-1/5 h-2/3 flex flex-col justify-evenly">
+                    <p class="text-x-theme-text-base text-md px-8"> Table </p>
+                    <h1 class="text-x-theme-text-active text-2xl px-8"> <%- update.table_name %> </h1>
+                </div> 
+                <div class="bg-x-theme-popup-background border border-x-theme-border rounded-md w-1/5 h-2/3 flex flex-col justify-evenly">
+                    <p class="text-x-theme-text-base text-md px-8"> Action </p>
+                    <h1 class="text-x-theme-text-active text-2xl px-8"> <%- update.action %> </h1>
+                </div> 
+                <div class="bg-x-theme-popup-background border border-x-theme-border rounded-md w-1/5 h-2/3 flex flex-col justify-evenly">
+                    <p class="text-x-theme-text-base text-md px-8"> Rows </p>
+                    <h1 class="text-x-theme-text-active text-2xl px-8"> <%- update.row_count %> </h1>
+                </div> 
+            </div>
+
+            <!-- Bottom Container -->
+            <div class="w-3/4 h-1/2 my-2 flex flex-col justify-evenly items-center"> 
+                <div class="w-11/12 h-1/4 bg-x-theme-popup-background border border-x-theme-border rounded-md flex flex-col justify-evenly">
+                    <p class="text-x-theme-text-base text-md px-8"> Timestamp </p>
+                    <h1 class="text-x-theme-text-active text-xl px-8"> <%- update.timestamp %> </h1>
+                </div> 
+                <div class="w-11/12 h-1/4 bg-x-theme-popup-background border border-x-theme-border rounded-md flex flex-col justify-evenly">
+                    <p class="text-x-theme-text-base text-md px-8"> Statement </p>
+                    <h1 class="text-x-theme-text-active text-sm px-8"> <%- update.statement %> </h1>
+                </div>
+                <div class="w-11/12 h-fit py-6 bg-x-theme-popup-background border border-x-theme-border rounded-md flex flex-col justify-evenly">
+                    <p class="text-x-theme-text-base text-md px-8"> Arguments </p>
+                    <h1 class="text-x-theme-text-active text-sm px-8"> <%- update.arguments %> </h1>
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+    <!-- Icon imports -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
