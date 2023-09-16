@@ -12,7 +12,7 @@ router.use(static("public"));
 router.use(bodyParser.urlencoded({ extended: false }));
 
 // Routes
-// '/accounts' : Render the accounts page and load the data
+// '/accounts?search=<search>' : Render the accounts page and load the data
 router.get("/accounts", (req, res) => {
     // Get queries from the request
     const searchQuery = req.query.search;

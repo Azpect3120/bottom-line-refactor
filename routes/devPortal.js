@@ -16,6 +16,9 @@ router.get("/dev-portal", (req, res) => {
     // Get user object from session
     const user = req.session.user;
 
+    // Get queries from the url
+    const searchQuery = req.query.search;
+
     // Ensure user exists 
     if (user) {     
         // Ensure user has dev permissions
@@ -32,6 +35,9 @@ router.get("/dev-portal", (req, res) => {
                 } else {
                     // Get update list from database
                     let updates = result.rows;
+
+                    // Filter by search query
+                    if (searchQuery) updates = updates.filter(update => update.table_name.toLowerCase().includes(searchQuery.toLowerCase()));
 
                     // Sort updates
                     updates = updates.sort((a, b) => {
