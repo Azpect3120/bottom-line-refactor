@@ -57,19 +57,21 @@
                                         <input type="text" disabled name="account_notes" value="<%= account.notes %>" class="overflow-x-auto bg-transparent outline-none rounded-md px-2 py-1 w-full">
                                     </td>
                                     
-                                    <td class="py-2 pr-8 text-center text-xl">
+                                    <td class="py-2 pr-8 text-center text-xl flex items-center justify-center">
                                         <a onclick="toggleAccountEdit('<%- account.id %>')">
                                             <ion-icon name="pencil" class="p-1 hover:text-x-theme-text-active transition-all" title="Edit account"></ion-icon>
                                         </a>
-                                        <a href="#">
-                                            <ion-icon name="trash" class="p-1 hover:text-x-theme-text-logout transition-all" title="Remove account"></ion-icon>
-                                        </a>
-                                    </td>
-                                    
                                     <input type="hidden" disabled name="client_id" value="<%- client_id %>">
                                     <input type="hidden" disabled name="id" value="<%- account.id %>">
                                     <button type="submit" class="hidden"></button>
                                 </form>
+                                    <form action="/dash/accounts/delete/account" method="POST" onsubmit="return confirmDelete();">
+                                        <input type="hidden" name="account_id" value="<%- account.id %>">
+                                        <button type="submit">
+                                            <ion-icon name="trash" class="p-1 hover:text-x-theme-text-logout transition-all" title="Remove account"></ion-icon>
+                                        </button>
+                                    </form>
+                                </td>
                             </tr>
                         <% } %>
                         <!-- Create Account Row -->
@@ -130,6 +132,11 @@
             document.getElementById("TEMP-ACCOUNT").classList.contains("hidden") ? document.getElementById("TEMP-ACCOUNT").classList.remove("hidden") : document.getElementById("TEMP-ACCOUNT").classList.add("hidden");
         }
 
+        function confirmDelete ()
+        {
+            return window.confirm("Are you sure you want to delete ths account?");
+            
+        }
     </script>
 
     <!-- Icon imports -->

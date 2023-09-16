@@ -57,10 +57,15 @@
                                         >
                                     </form>
                                 </td>
-                                <td class="px-8 py-2 text-center text-xl">
+                                <td class="px-8 py-2 text-xl flex items-center justify-center">
                                     <a href="/dash/accounts/view?client=<%- client.id %>"><ion-icon name="eye" class="p-1 hover:text-x-theme-text-active transition-all" title="View accounts"></ion-icon></a>
                                     <button onclick="toggleClientEdit('<%- client.id %>');"><ion-icon name="pencil" class="p-1 hover:text-x-theme-text-active transition-all" title="Edit client"></ion-icon></button>
-                                    <a href="#"><ion-icon name="trash" class="p-1 hover:text-x-theme-text-logout transition-all" title="Remove client"></ion-icon></a>
+                                    <form action="/dash/accounts/delete/client" method="POST" onsubmit="return confirmDelete();">
+                                        <input type="hidden" name="client_id" value="<%- client.id %>">
+                                        <button type="submit">
+                                            <ion-icon name="trash" class="p-1 hover:text-x-theme-text-logout transition-all" title="Remove client"></ion-icon>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         <% } %>
@@ -82,6 +87,11 @@
                 element.classList.remove("bg-x-theme-border")
             }
             console.log(element);
+        }
+
+        function confirmDelete ()
+        {
+            return window.confirm("Are you sure you want to delete ths client?");
         }
     </script>
 

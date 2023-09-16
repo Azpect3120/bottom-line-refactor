@@ -174,5 +174,76 @@ router.post("/accounts/add/account", (req, res) => {
     });
 });
 
+// '/accounts/delete/client' : Deletes a client from the database
+router.post("/accounts/delete/client", (req, res) => {
+    // Get user object from session
+    const user = req.session.user;
+
+    // Get body from request
+    const client_id = req.body.client_id;
+
+    // Ensure user exists
+    if (user) {
+        // Ensure user has permission to delete
+        if (user.permission.toLowerCase() === "dev" || user.permission.toLowerCase() === "admin") {
+            // SQL
+            const query = `DELETE FROM clients WHERE id = $1;`;
+            const args = [ client_id ];
+
+            // Query database
+            database.query(query, args,(err, result) => {
+                updateDatabase(user.id, "clients", query, args, result);
+                if (err) {
+                    console.error("Error deleting client", err);
+                    res.status(500).redirect("/dash/accounts");
+                } else {
+                    res.status(204).redirect("/dash/accounts");
+                }
+            });
+
+        // Redirect user that doesn't have permission
+        } else {
+            res.status(401).render("pop-ups/unauthorized", { user });
+        }
+    } else {
+        res.status(302).redirect("/login");
+    }
+});
+
+// '/accounts/delete/account' : Deletes an account from the database
+router.post("/accounts/delete/account", (req, res) => {
+    // Get user object from session
+    const user = req.session.user;
+
+    // Get body from request
+    const account_id = req.body.account_id;
+
+    // Ensure user exists
+    if (user) {
+        // Ensure user has permission to delete
+        if (user.permission.toLowerCase() === "dev" || user.permission.toLowerCase() === "admin") {
+            // SQL
+            const query = `DELETE FROM accounts WHERE id = $1;`;
+            const args = [ account_id ];            
+
+            // Query database
+            database.query(query, args,(err, result) => {
+                updateDatabase(user.id, "accounts", query, args, result);
+                if (err) {
+                    console.error("Error deleting account", err);
+                    res.status(500).redirect("/dash/accounts");
+                } else {
+                    res.status(204).redirect("/dash/accounts");
+                }
+            });
+
+        // Redirect user that doesn't have permission
+        } else {
+            res.status(401).render("pop-ups/unauthorized", { user });
+        }
+    } else {
+        res.status(302).redirect("/login");
+    }
+});
 // Export router
 module.exports = router;
