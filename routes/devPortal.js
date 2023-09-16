@@ -51,9 +51,9 @@ router.get("/dev-portal", (req, res) => {
                 } 
             });
         
+        // Redirect user that doesn't have permission
         } else {
-            // Redirect user that doesn't have permission
-            res.status(401).redirect("/dash");
+            res.status(401).render("pop-ups/unauthorized", { user });
         }
 
     } else {
@@ -106,9 +106,10 @@ router.get("/dev-portal/view", (req, res) => {
                     });
                 }
             });
+
+        // Redirect user that doesn't have permission
         } else {
-            // Redirect user that doesn't have permission
-            res.status(401).redirect("/dash");
+            res.status(401).render("pop-ups/unauthorized", { user });
         }
        
     } else {

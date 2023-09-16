@@ -748,6 +748,10 @@ video {
   width: 60%;
 }
 
+.w-1\/2 {
+  width: 50%;
+}
+
 .min-w-fit {
   min-width: -moz-fit-content;
   min-width: fit-content;
@@ -1148,6 +1152,15 @@ video {
   color: rgb(240 52 60 / var(--tw-text-opacity));
 }
 
+.text-x-theme-border {
+  --tw-text-opacity: 1;
+  color: rgb(55 68 107 / var(--tw-text-opacity));
+}
+
+.underline {
+  text-decoration-line: underline;
+}
+
 .opacity-70 {
   opacity: 0.7;
 }
@@ -1221,6 +1234,10 @@ video {
 .hover\:text-x-theme-text-logout:hover {
   --tw-text-opacity: 1;
   color: rgb(240 52 60 / var(--tw-text-opacity));
+}
+
+.hover\:underline:hover {
+  text-decoration-line: underline;
 }
 
 .group:hover .group-hover\:rotate-180 {
