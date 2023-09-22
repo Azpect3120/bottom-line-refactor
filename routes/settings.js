@@ -15,7 +15,16 @@ router.get("/settings", (req, res) => {
 
     // Ensure a user is logged in
     if (user) {
-        // Get the secret from the database
+        // Create temp user object
+        const temp_user = {
+            id: user.id,
+            username: user.username,
+            password: decryptString(user.password),
+            secret: user.secret,
+            permission: user.permission
+        };
+        
+        // SQL
         const query = "SELECT secret FROM users WHERE id = $1";
         database.query(query, [ user.id ], (err, result) => {
             // Error
@@ -30,17 +39,18 @@ router.get("/settings", (req, res) => {
                 if (secret) {
                     generateDataUrl(decryptString(secret), (err, qr_url) => {
                         if (!err) {
-                            res.status(200).render("dashboard/settings", { user, qr_url, secret: decryptString(secret) });
+                            res.status(200).render("dashboard/settings", { user: temp_user, qr_url, secret: decryptString(secret) });
                             return;
                         }
                     });
 
                 // User has no secret
                 } else {
-                    res.status(200).render("dashboard/settings", { user, qr_url: null, secret: null });
+                    res.status(200).render("dashboard/settings", { user: temp_user, qr_url: null, secret: null });
                 }
             }
         });
+    // No user logged in 
     } else {
         res.status(302).redirect("/login")
     }
@@ -52,24 +62,30 @@ router.post("/settings/generateNewSecret", (req, res) => {
     // Get user from session
     const user = req.session.user;
 
-    // Generate a new secret
-    const secret = encryptString(createSecret());
+    // Ensure user is logged in 
+    if (user) {
+        // Generate a new secret
+        const secret = encryptString(createSecret());
 
-    // SQL
-    const query = "UPDATE users SET secret = $1 WHERE id = $2";
-    const args = [ secret, user.id ];
+        // SQL
+        const query = "UPDATE users SET secret = $1 WHERE id = $2";
+        const args = [ secret, user.id ];
 
-    // Update database
-    database.query(query, args, (err, result) => {
-        updateDatabase(user.id, "users", query, args, result);
-        // Error
-        if (err) {
-            console.error(err);
-            res.status(500).redirect("/dash/settings");
-        } else {
-            res.status(301).redirect("/dash/settings");            
-        }
-    });
+        // Update database
+        database.query(query, args, (err, result) => {
+            updateDatabase(user.id, "users", query, args, result);
+            // Error
+            if (err) {
+                console.error(err);
+                res.status(500).redirect("/dash/settings");
+            } else {
+                res.status(301).redirect("/dash/settings");            
+            }
+        });
+    // No user logged in
+    } else {
+        res.status(302).redirect("/login");
+    }
 });
 
 // '/settings/disableAuth' : Create a new secret and apply it to a user
@@ -77,21 +93,27 @@ router.post("/settings/disableAuth", (req, res) => {
     // Get user from session
     const user = req.session.user;
 
-    // SQL
-    const query = "UPDATE users SET secret = null WHERE id = $1";
-    const args = [ user.id ];
+    // Ensure user is logged in
+    if (user) {
+        // SQL
+        const query = "UPDATE users SET secret = null WHERE id = $1";
+        const args = [ user.id ];
 
-    // Update database
-    database.query(query, args, (err, result) => {
-        updateDatabase(user.id, "users", query, args, result);
-        // Error
-        if (err) {
-            console.error(err);
-            res.status(500).redirect("/dash/settings");
-        } else {
-            res.status(301).redirect("/dash/settings");            
-        }
-    });
+        // Update database
+        database.query(query, args, (err, result) => {
+            updateDatabase(user.id, "users", query, args, result);
+            // Error
+            if (err) {
+                console.error(err);
+                res.status(500).redirect("/dash/settings");
+            } else {
+                res.status(301).redirect("/dash/settings");            
+            }
+        });
+    // No user logged in
+    } else {
+        res.status(302).redirect("/login");
+    }
 });
 
 

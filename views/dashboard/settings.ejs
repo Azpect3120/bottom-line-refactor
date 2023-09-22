@@ -36,8 +36,9 @@
 
                 <!-- List of Sub-Menus -->
                 <ul class="w-full h-5/6 overflow-y-auto flex flex-col items-center">
+
                     <!-- Authentication -->
-                    <li class="w-11/12 h-fit p-4 bg-x-theme-mini-popup-background border border-x-theme-border rounded-md">
+                    <li class="w-11/12 h-fit p-4 bg-x-theme-mini-popup-background border border-x-theme-border rounded-md my-4">
                         <h2 class="text-lg text-x-theme-text-active">
                             Two-Factor Authentication
                         </h2>
@@ -74,7 +75,40 @@
                         </form>
                         
                     </li>
+                    
+                    <!-- Account Settings -->
+                    <li class="w-11/12 h-fit p-4 bg-x-theme-mini-popup-background border border-x-theme-border rounded-md my-4">
+                        <h2 class="text-lg text-x-theme-text-active">
+                            Account Settings
+                        </h2>
 
+                        <p class="text-sm text-x-theme-text-base">
+                           Manage your account preferences and security
+                        </p>
+
+                        <h3 class="text-base text-x-theme-text-active pt-4 pb-2">
+                            Permission Settings
+                        </h3>
+
+                        <p class="text-sm text-x-theme-text-base">
+                            Your permission: <span class="hover:underline hover:text-x-theme-text-active px-1"><%- user.permission %></span>
+                        </p>
+
+                        <h3 class="text-base text-x-theme-text-active pt-4 pb-2">
+                            Manage Account Details
+                        </h3>
+
+                        <p class="text-sm text-x-theme-text-base py-1">
+                            Username:
+                            <input type="text" disabled class="px-1 bg-transparent hover:underline hover:text-x-theme-text-active" value="<%- user.username %>">
+                        </p>
+
+                        <p class="text-sm text-x-theme-text-base py-1">
+                            Password:
+                            <input type="text" disabled class="px-1 hover:bg-transparent bg-x-theme-text-base text-transparent hover:underline hover:text-x-theme-text-active" value="<%- user.password %>">
+                        </p>
+
+                    </li>
 
 
                 </ul>
