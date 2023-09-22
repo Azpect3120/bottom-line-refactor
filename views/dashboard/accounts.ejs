@@ -24,7 +24,10 @@
                 <div class="h-1/6 w-full flex items-center px-8">
                     <h1 class="text-2xl text-x-theme-text-active w-full"> <%- client_name %> </h1>
 
-                    <button onclick="addAccountToggle('<%- client_id %>')" title="Add an account to this client" class="text-xs bg-x-theme-buttons text-x-theme-text-active px-3 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Add </button>
+
+                    <% if (user.permission.toLowerCase() === "dev" || user.permission.toLowerCase() === "admin") { %>
+                        <button onclick="addAccountToggle('<%- client_id %>')" title="Add an account to this client" class="text-xs bg-x-theme-buttons text-x-theme-text-active px-3 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Add </button>
+                    <% } %>
                     <a href="/dash/accounts" title="Back to client list" class="text-xs bg-x-theme-buttons text-x-theme-text-active mx-4 px-3 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Back </a>
                 </div>
 
@@ -36,11 +39,15 @@
                             <th class="pb-4"> Username </th>
                             <th class="pb-4"> Password </th>
                             <th class="pb-4"> Notes </th>
-                            <th class="pb-4 pr-8 text-center"> Actions </th>
+                            <% if (user.permission.toLowerCase() === "dev" || user.permission.toLowerCase() === "admin") { %>
+                                <th class="pb-4 pr-8 text-center"> Actions </th>
+                            <% } %>
                         </tr>
                         <% for (const account of accounts) { %>
                             <tr id="<%- account.id %>" class="text-x-theme-text-base border-y border-x-theme-border hover:bg-x-theme-mini-popup-background">
-                                <form action="/dash/accounts/edit/account" method="POST">
+                                <% if (user.permission.toLowerCase() === "dev" || user.permission.toLowerCase() === "admin") { %>
+                                    <form action="/dash/accounts/edit/account" method="POST">
+                                <% } %>
                                     <td class="pl-8 py-2">
                                         <input type="text" disabled name="account_name" value="<%= account.name %>" class="overflow-x-auto bg-transparent outline-none rounded-md px-2 py-1 w-full">
                                     </td>
@@ -57,21 +64,23 @@
                                         <input type="text" disabled name="account_notes" value="<%= account.notes %>" class="overflow-x-auto bg-transparent outline-none rounded-md px-2 py-1 w-full">
                                     </td>
                                     
-                                    <td class="py-2 pr-8 text-center text-xl flex items-center justify-center">
-                                        <a onclick="toggleAccountEdit('<%- account.id %>')">
-                                            <ion-icon name="pencil" class="p-1 hover:text-x-theme-text-active transition-all" title="Edit account"></ion-icon>
-                                        </a>
-                                    <input type="hidden" disabled name="client_id" value="<%- client_id %>">
-                                    <input type="hidden" disabled name="id" value="<%- account.id %>">
-                                    <button type="submit" class="hidden"></button>
-                                </form>
-                                    <form action="/dash/accounts/delete/account" method="POST" onsubmit="return confirmDelete();">
-                                        <input type="hidden" name="account_id" value="<%- account.id %>">
-                                        <button type="submit">
-                                            <ion-icon name="trash" class="p-1 hover:text-x-theme-text-logout transition-all" title="Remove account"></ion-icon>
-                                        </button>
+                                    <% if (user.permission.toLowerCase() === "dev" || user.permission.toLowerCase() === "admin") { %>
+                                        <td class="py-2 pr-8 text-center text-xl flex items-center justify-center">
+                                            <a onclick="toggleAccountEdit('<%- account.id %>')">
+                                                <ion-icon name="pencil" class="p-1 hover:text-x-theme-text-active transition-all" title="Edit account"></ion-icon>
+                                            </a>
+                                        <input type="hidden" disabled name="client_id" value="<%- client_id %>">
+                                        <input type="hidden" disabled name="id" value="<%- account.id %>">
+                                        <button type="submit" class="hidden"></button>
                                     </form>
-                                </td>
+                                        <form action="/dash/accounts/delete/account" method="POST" onsubmit="return confirmDelete();">
+                                            <input type="hidden" name="account_id" value="<%- account.id %>">
+                                            <button type="submit">
+                                                <ion-icon name="trash" class="p-1 hover:text-x-theme-text-logout transition-all" title="Remove account"></ion-icon>
+                                            </button>
+                                        </form>
+                                    </td>
+                                <% } %>
                             </tr>
                         <% } %>
                         <!-- Create Account Row -->
