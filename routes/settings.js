@@ -1,62 +1,98 @@
 // Dependencies
 const { Router } = require("express");
 const { Config } = require("pg");
-const { database } = require("../model/database");
+const { database, updateDatabase } = require("../model/database");
+const { generateDataUrl, createSecret } = require("../model/auth");
+const { encryptString, decryptString } = require("../model/enc");
 
 // Create router
 const router = Router(); 
 
-// '/' : Render the page
-router.get("/", (req, res) => {
+// '/settings' : Render the page
+router.get("/settings", (req, res) => {
     // Get user from session
     const user = req.session.user;
 
     // Ensure a user is logged in
     if (user) {
-        res.status(200).render("settings", { user });
-    } else {
-        res.status(302).redirect("/login");
-    }
-});
-
-
-// '/changeUsername' : Changes the username of the logged in user
-router.post("/changeUsername", (req, res) => {
-    // Get user object stored in session
-    const user = req.session.user;
-
-    // Get request params
-    const { currentUsername, newUsername } = req.body;
-    
-    // Check if inputted username matches the username
-    if (currentUsername === user.username) {
-        // Create SQL query
-        const sql = "UPDATE users SET username = $1 WHERE username = $2";
-        const values = [newUsername, user.username];
-
-        // Run query
-        database.query(sql, values, (err, result) => {
+        // Get the secret from the database
+        const query = "SELECT secret FROM users WHERE id = $1";
+        database.query(query, [ user.id ], (err, result) => {
             // Error
             if (err) {
-                console.error("Error updating username", err);
-                res.status(500).render("settings", { user, message: "Unable to update user settings" });
+                console.error(err);
+                res.status(500).redirect("/dash/settings");
             } else {
-                // Update user object in session
-                user.username = newUsername;
-                req.session.user = user;
-            
-                // Redirect back to settings page
-                res.status(301).redirect("/dash/settings");
+                // Get secret 
+                const secret = result.rows[0].secret;
+
+                // Generate QR code and render
+                if (secret) {
+                    generateDataUrl(decryptString(secret), (err, qr_url) => {
+                        if (!err) {
+                            res.status(200).render("dashboard/settings", { user, qr_url, secret: decryptString(secret) });
+                            return;
+                        }
+                    });
+
+                // User has no secret
+                } else {
+                    res.status(200).render("dashboard/settings", { user, qr_url: null, secret: null });
+                }
             }
         });
-
-    // Inputted username does not match
     } else {
-        res.status(401).render("settings", { user, message: "Current username does not match" });
+        res.status(302).redirect("/login")
     }
 });
 
 
+// '/settings/generateNewSecret' : Create a new secret and apply it to a user
+router.post("/settings/generateNewSecret", (req, res) => {
+    // Get user from session
+    const user = req.session.user;
+
+    // Generate a new secret
+    const secret = encryptString(createSecret());
+
+    // SQL
+    const query = "UPDATE users SET secret = $1 WHERE id = $2";
+    const args = [ secret, user.id ];
+
+    // Update database
+    database.query(query, args, (err, result) => {
+        updateDatabase(user.id, "users", query, args, result);
+        // Error
+        if (err) {
+            console.error(err);
+            res.status(500).redirect("/dash/settings");
+        } else {
+            res.status(301).redirect("/dash/settings");            
+        }
+    });
+});
+
+// '/settings/disableAuth' : Create a new secret and apply it to a user
+router.post("/settings/disableAuth", (req, res) => {
+    // Get user from session
+    const user = req.session.user;
+
+    // SQL
+    const query = "UPDATE users SET secret = null WHERE id = $1";
+    const args = [ user.id ];
+
+    // Update database
+    database.query(query, args, (err, result) => {
+        updateDatabase(user.id, "users", query, args, result);
+        // Error
+        if (err) {
+            console.error(err);
+            res.status(500).redirect("/dash/settings");
+        } else {
+            res.status(301).redirect("/dash/settings");            
+        }
+    });
+});
 
 
 // Export router

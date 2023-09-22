@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/main.css">
+    <title>BLBS: Settings</title>
+</head>
+<body>
+
+    <!-- Body -->
+    <div class="w-full h-screen bg-x-theme-background">
+
+        <!-- Sidebar -->
+        <%- include("partials/sidebar", { user }) %>
+
+        <!-- Page Content -->
+        <div class="w-5/6 ml-auto h-full flex justify-center items-center">
+
+            <!-- Setting Table -->
+            <div class="w-3/4 h-3/4 border border-x-theme-border bg-x-theme-popup-background rounded-md">
+                <!-- Header -->
+                <div class="h-1/6 w-full flex items-center px-8">
+                    <h1 class="text-2xl text-x-theme-text-active w-full pl-5"> Settings </h1>
+
+                    <form action="#" method="GET" class="w-full flex justify-end">
+                        <input
+                            type="text"
+                            name="search"
+                            class="bg-x-theme-mini-popup-background border border-x-theme-border text-x-theme-text-base px-2 py-1.5 rounded-md text-xs outline-none w-2/3"
+                            placeholder="Search for setting..."
+                        >
+                        <button type="submit" class="text-xs bg-x-theme-buttons text-x-theme-text-active mx-4 px-2 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Search </button>
+                    </form>
+                </div>
+
+                <!-- List of Sub-Menus -->
+                <ul class="w-full h-5/6 overflow-y-auto flex flex-col items-center">
+                    <!-- Authentication -->
+                    <li class="w-11/12 h-fit p-4 bg-x-theme-mini-popup-background border border-x-theme-border rounded-md">
+                        <h2 class="text-lg text-x-theme-text-active">
+                            Two-Factor Authentication
+                        </h2>
+
+                        <p class="text-sm text-x-theme-text-base">
+                           Enhance account security with two-factor authentication (2FA) 
+                        </p>
+
+                        <form action="/dash/settings/disableAuth" method="POST">
+                            <button type="submit" class="text-sm bg-x-theme-buttons hover:bg-x-theme-text-logout transition-all text-x-theme-text-active rounded-md my-2 px-3 py-1.5"> Disable 2FA </button> 
+                        </form>
+
+                        <h3 class="text-base text-x-theme-text-active pt-4 pb-2">
+                            Connect Authentication App
+                        </h3>
+
+                        <% if (qr_url != null && secret != null) { %>
+                            <img 
+                                src="<%- qr_url %>"
+                                alt="Two factor auth QR code"
+                                class=""
+                            >
+                            <p class="text-sm text-x-theme-text-base py-2">
+                                Secret:
+                                <span class="hover:text-x-theme-text-active hover:underline">
+                                    <%- secret %>
+                                </span>
+                            </p>
+                        <% } %>
+
+                        <!-- Generate New Secret -->
+                        <form action="/dash/settings/generateNewSecret" method="POST">
+                            <button type="submit" class="text-sm bg-x-theme-buttons hover:bg-x-theme-buttons-active-dark transition-all text-x-theme-text-active rounded-md px-3 py-1.5"> Regenerate Secret </button> 
+                        </form>
+                        
+                    </li>
+
+
+
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    
+
+
+    <!-- Icon imports -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

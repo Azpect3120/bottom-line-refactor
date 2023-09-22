@@ -38,11 +38,7 @@ router.post("/auth", (req, res) => {
             if (user) {
                 req.session.user = user;
                 // Redirect to auth page if user has 2FA set up
-                if (user.secret != null) {
-                    res.status(200).render("login/auth");
-                } else {
-                    res.status(301).redirect("/dash");
-                } 
+                user.secret ? res.status(200).render("login/auth") : res.status(301).redirect("/dash")
             } else {
                 // Redirect user to invalid page
                 res.status(401).render("login/menu", { message: "Invalid username or password" });
@@ -58,19 +54,13 @@ router.post("/auth", (req, res) => {
 router.post("/verify", (req, res) => {
     // Hold token and session
     const { token } = req.body;
-    const secret = req.session.user.secret;
+    const secret = decryptString(req.session.user.secret);
 
     // Stores a boolean based on success of code entered
     const authed = validateToken(token, secret);
 
     // Handle auth
-    if (authed) {
-        // Redirect user to dashboard 
-        res.status(301).redirect("/dash/");
-    } else {
-        // Invalid code
-        res.status(401).render("login/auth", { message: "Incorrect authentication code" });
-    }
+    authed ? res.status(301).redirect("/dash/") : res.status(401).render("login/auth", { message: "Incorrect authentication code" });
 });
 
 // Export router

@@ -24,6 +24,7 @@ module.exports = {
         "x-theme-border": "#37446B",
         "x-theme-buttons": "#6C72FF",
         "x-theme-buttons-active": "#212C4D",
+        "x-theme-buttons-active-dark": "#32356e",
         "x-theme-hyperlink": "#5A4390",
         "x-theme-text-base": "#AEB9E1",
         "x-theme-text-active": "#FFFFFF",

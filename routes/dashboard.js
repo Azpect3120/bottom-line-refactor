@@ -1,5 +1,5 @@
 // Dependencies
-const { Router }= require("express");
+const { Router } = require("express");
 
 // Create router
 const router = Router();
@@ -10,13 +10,7 @@ router.get("/", (req, res) => {
     const user = req.session.user;
 
     // Ensure a user is logged in
-    if (user) {
-        res.status(200).render("dashboard/home", { user });
-
-    // User is not found in the session: return to login page
-    } else {
-        res.status(301).redirect("/login");
-    }
+    user ? res.status(200).render("dashboard/home", { user }) : res.status(301).redirect("/login")
 });
 
 // '/logout' : logout of dashboard
@@ -30,6 +24,7 @@ router.get("/logout", (req, res) => {
         }
     });
 });
+
 
 // Export router
 module.exports = router;
