@@ -36,7 +36,7 @@ router.get("/accounts", (req, res) => {
             clients.sort((a, b) => a.name.localeCompare(b.name));
 
             // Filter clients by search
-            if (searchQuery) clients = clients.filter(client => client.name.includes(searchQuery));
+            if (searchQuery) clients = clients.filter(client => client.name.includes(searchQuery.toLowerCase()));
     
             // Ensure a user is logged in
             if (user) {
