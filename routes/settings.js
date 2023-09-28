@@ -15,15 +15,6 @@ router.get("/settings", (req, res) => {
 
     // Ensure a user is logged in
     if (user) {
-        // Create temp user object
-        const temp_user = {
-            id: user.id,
-            username: user.username,
-            password: decryptString(user.password),
-            secret: user.secret,
-            permission: user.permission
-        };
-        
         // SQL
         const query = "SELECT secret FROM users WHERE id = $1";
         database.query(query, [ user.id ], (err, result) => {
@@ -39,14 +30,14 @@ router.get("/settings", (req, res) => {
                 if (secret) {
                     generateDataUrl(decryptString(secret), (err, qr_url) => {
                         if (!err) {
-                            res.status(200).render("dashboard/settings", { user: temp_user, qr_url, secret: decryptString(secret) });
+                            res.status(200).render("dashboard/settings", { user, qr_url, secret: decryptString(secret) });
                             return;
                         }
                     });
 
                 // User has no secret
                 } else {
-                    res.status(200).render("dashboard/settings", { user: temp_user, qr_url: null, secret: null });
+                    res.status(200).render("dashboard/settings", { user, qr_url: null, secret: null });
                 }
             }
         });
@@ -73,12 +64,12 @@ router.post("/settings/generateNewSecret", (req, res) => {
 
         // Update database
         database.query(query, args, (err, result) => {
-            updateDatabase(user.id, "users", query, args, result);
             // Error
             if (err) {
                 console.error(err);
                 res.status(500).redirect("/dash/settings");
             } else {
+                updateDatabase(user.id, "users", query, args, result);
                 res.status(301).redirect("/dash/settings");            
             }
         });
@@ -101,16 +92,114 @@ router.post("/settings/disableAuth", (req, res) => {
 
         // Update database
         database.query(query, args, (err, result) => {
-            updateDatabase(user.id, "users", query, args, result);
             // Error
             if (err) {
                 console.error(err);
                 res.status(500).redirect("/dash/settings");
             } else {
+                updateDatabase(user.id, "users", query, args, result);
                 res.status(301).redirect("/dash/settings");            
             }
         });
     // No user logged in
+    } else {
+        res.status(302).redirect("/login");
+    }
+});
+
+// '/settings/changeUsername' : Changes the username of the logged in user
+router.post("/settings/changeUsername", (req, res) => {
+    // Get user from session
+    const user = req.session.user;
+
+    // Get request body
+    const { newUsername, confirmPassword } = req.body;
+
+    // Ensure user is logged in 
+    if (user) {
+        // Ensure password matches
+        if (decryptString(user.password) === confirmPassword) {
+            // SQL
+            const query = "UPDATE users SET username = $1 WHERE id = $2";
+            const args = [ newUsername, user.id ];
+
+            // Update database
+            database.query(query, args, (err, result) => {
+                // Error
+                if (err) {
+                    console.error(err);
+                    res.status(500).redirect("/dash/settings");
+                } else {
+                    updateDatabase(user.id, "users", query, args, result);
+                    
+                    // Update the session
+                    req.session.user.username = newUsername;
+
+                    // Redirect
+                    res.status(301).redirect("/dash/settings");
+                }
+            });
+
+        // INCORRECT PASSWORD
+        } else {
+            console.log("INCORRECT PASSWORD");
+            // DO SOMETHING
+        }
+    // No user logged in 
+    } else {
+        res.status(302).redirect("/login");
+    }
+});
+
+// '/settings/changePassword' : Changes the password of the logged in user
+router.post("/settings/changePassword", (req, res) => {
+    // Get user from session
+    const user = req.session.user;
+
+    // Get request body
+    const { oldPassword, newPassword, confirmPassword } = req.body;
+
+    // Ensure user is logged in 
+    if (user) {
+        // Ensure password matches
+        if (decryptString(user.password) === oldPassword) {
+            // Ensure new passwords match
+            if (newPassword === confirmPassword) {
+                // Encrypt password
+                const encryptedPassword = encryptString(confirmPassword);
+
+                // SQL
+                const query = "UPDATE users SET password = $1 WHERE id = $2";
+                const args = [ encryptedPassword, user.id ];
+
+                // Update database
+                database.query(query, args, (err, result) => {
+                    // Error
+                    if (err) {
+                        console.error(err);
+                        res.status(500).redirect("/dash/settings");
+                    } else {
+                        updateDatabase(user.id, "users", query, args, result);
+                        
+                        // Update the session
+                        req.session.user.password = encryptedPassword;
+
+                        // Redirect
+                        res.status(301).redirect("/dash/settings");
+                    }
+                });
+            // New passwords do not match
+            } else {
+                console.log("NEW PASSWORDS DO NOT MATCH");
+                // DO SOMETHING
+            }
+
+        // INCORRECT PASSWORD
+        } else {
+            console.log("INCORRECT PASSWORD");
+            // DO SOMETHING
+        }
+    // No user logged in 
     } else {
         res.status(302).redirect("/login");
     }
