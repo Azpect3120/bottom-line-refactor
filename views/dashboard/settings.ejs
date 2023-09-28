@@ -86,7 +86,8 @@
                            Manage your account preferences and security
                         </p>
 
-                        <h3 class="text-base text-x-theme-text-active pt-4 pb-2">
+                        <!-- Permissions Sub Menu -->
+                        <h3 class="text-base text-x-theme-text-active pt-6 pb-3">
                             Permission Settings
                         </h3>
 
@@ -94,7 +95,8 @@
                             Your permission: <span class="hover:underline hover:text-x-theme-text-active px-1"><%- user.permission %></span>
                         </p>
 
-                        <h3 class="text-base text-x-theme-text-active pt-4 pb-2">
+                        <!-- Account Details Sub Menu -->
+                        <h3 class="text-base text-x-theme-text-active pt-6 pb-3">
                             Manage Account Details
                         </h3>
 
@@ -103,10 +105,87 @@
                             <input type="text" disabled class="px-1 bg-transparent hover:underline hover:text-x-theme-text-active" value="<%- user.username %>">
                         </p>
 
+
+                        <!-- Change Username Form --> 
+                        <h3 class="text-sm text-x-theme-text-active pb-1.5 pt-3">
+                            Update Username
+                        </h3>
+
+                        <form 
+                            action="/dash/settings/changeUsername"
+                            method="POST"
+                            class="flex flex-col w-1/4"
+                        >
+                            <input 
+                                type="text" 
+                                name="newUsername"
+                                placeholder="New username"
+                                class="w-full text-sm px-2 py-1.5 my-1.5 rounded-md bg-x-theme-popup-background text-x-theme-text-active outline-none"
+                            >
+                            <input 
+                                type="password" 
+                                name="confirmPassword"
+                                placeholder="Confirm password"
+                                class="w-full text-sm px-2 py-1.5 my-1.5 rounded-md bg-x-theme-popup-background text-x-theme-text-active outline-none"
+                            >
+                            
+                            <button 
+                                type="submit" 
+                                class="text-sm bg-x-theme-buttons hover:bg-x-theme-buttons-active-dark transition-all text-x-theme-text-active rounded-md px-3 py-1.5 my-1.5 w-fit"
+                            > 
+                                Change Username
+                            </button> 
+
+
+                        </form>
+
+
+                        <!-- Account Security Sub Menu -->
+                        <h3 class="text-base text-x-theme-text-active pt-6 pb-3">
+                            Account Security
+                        </h3>
+
                         <p class="text-sm text-x-theme-text-base py-1">
-                            Password:
-                            <input type="text" disabled class="px-1 hover:bg-transparent bg-x-theme-text-base text-transparent hover:underline hover:text-x-theme-text-active" value="<%- user.password %>">
+                            Update your password frequently to promote account security
                         </p>
+
+                        <!-- Change Password Form --> 
+                        <h3 class="text-sm text-x-theme-text-active pb-1.5 pt-3">
+                            Update Password
+                        </h3>
+
+                        <form 
+                            action="/dash/settings/changePassword"
+                            method="POST"
+                            class="flex flex-col w-1/4"
+                        >
+                            <input 
+                                type="password" 
+                                name="oldPassword"
+                                placeholder="Enter old password"
+                                class="w-full text-sm px-2 py-1.5 my-1.5 rounded-md bg-x-theme-popup-background text-x-theme-text-active outline-none"
+                            >
+                            <input 
+                                type="password" 
+                                name="newPassword"
+                                placeholder="Enter new password"
+                                class="w-full text-sm px-2 py-1.5 my-1.5 rounded-md bg-x-theme-popup-background text-x-theme-text-active outline-none"
+                            >
+                            <input 
+                                type="password" 
+                                name="confirmPassword"
+                                placeholder="Confirm new password"
+                                class="w-full text-sm px-2 py-1.5 my-1.5 rounded-md bg-x-theme-popup-background text-x-theme-text-active outline-none"
+                            >
+                            
+                            <button 
+                                type="submit" 
+                                class="text-sm bg-x-theme-buttons hover:bg-x-theme-buttons-active-dark transition-all text-x-theme-text-active rounded-md px-3 py-1.5 my-1.5 w-fit"
+                            > 
+                                Reset Password
+                            </button> 
+                        </form>
+
 
                     </li>
 

@@ -36,7 +36,7 @@ router.get("/accounts", (req, res) => {
             clients.sort((a, b) => a.name.localeCompare(b.name));
 
             // Filter clients by search
-            if (searchQuery) clients = clients.filter(client => client.name.includes(searchQuery));
+            if (searchQuery) clients = clients.filter(client => client.name.includes(searchQuery.toLowerCase()));
     
             // Ensure a user is logged in
             if (user) {
@@ -111,11 +111,11 @@ router.post("/accounts/edit/client", (req, res) => {
 
     // Update database
     database.query(query, args, (err, result) => {
-        updateDatabase(req.session.user.id, "clients", query, args, result);
         if (err) {
             console.error("Error updating client name", err);
             res.status(500).redirect("/dash/accounts");
         } else {
+            updateDatabase(req.session.user.id, "clients", query, args, result);
             res.status(301).redirect("/dash/accounts");
         }
     });
@@ -138,11 +138,11 @@ router.post("/accounts/edit/account", (req, res) => {
 
     // Update database
     database.query(query, args, (err, result) => {
-        updateDatabase(req.session.user.id, "accounts", query, args, result);
         if (err) {
             console.error("Error updating account details", err);
             res.status(500).redirect(`/dash/accounts/view?client=${req.body.client_id}`);
         } else {
+            updateDatabase(req.session.user.id, "accounts", query, args, result);
             res.status(301).redirect(`/dash/accounts/view?client=${req.body.client_id}`);
         }
     });
@@ -164,11 +164,11 @@ router.post("/accounts/add/account", (req, res) => {
 
     // Update database
     database.query(query, args, (err, result) => {
-        updateDatabase(req.session.user.id, "accounts", query, args, result);
         if (err) {
             console.error("Error adding account to client", err);
             res.status(500).redirect(`/dash/accounts/view?client=${req.body.client_id}`);
         } else {
+            updateDatabase(req.session.user.id, "accounts", query, args, result);
             res.status(301).redirect(`/dash/accounts/view?client=${req.body.client_id}`);
         }
     });
@@ -192,11 +192,11 @@ router.post("/accounts/delete/client", (req, res) => {
 
             // Query database
             database.query(query, args,(err, result) => {
-                updateDatabase(user.id, "clients", query, args, result);
                 if (err) {
                     console.error("Error deleting client", err);
                     res.status(500).redirect("/dash/accounts");
                 } else {
+                    updateDatabase(user.id, "clients", query, args, result);
                     res.status(204).redirect("/dash/accounts");
                 }
             });
@@ -228,11 +228,11 @@ router.post("/accounts/delete/account", (req, res) => {
 
             // Query database
             database.query(query, args,(err, result) => {
-                updateDatabase(user.id, "accounts", query, args, result);
                 if (err) {
                     console.error("Error deleting account", err);
                     res.status(500).redirect("/dash/accounts");
                 } else {
+                    updateDatabase(user.id, "accounts", query, args, result);
                     res.status(204).redirect("/dash/accounts");
                 }
             });
