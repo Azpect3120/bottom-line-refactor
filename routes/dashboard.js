@@ -15,9 +15,6 @@ router.get("/", (req, res) => {
     // Get user object from session
     const user = req.session.user;
 
-    // Import Change Log
-    // const changeLog = require("../data/changeLog.json");
-
     // Ensure user is logged in 
     if (user) {
         // SQL
