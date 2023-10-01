@@ -14,9 +14,80 @@
         <!-- Sidebar -->
         <%- include("partials/sidebar", { user }) %>
 
+        <!-- Page Content -->
+        <div class="w-5/6 ml-auto h-full flex flex-col justify-center items-center">
+
+            <!-- Header -->
+            <div class="w-2/3 h-20 bg-x-theme-popup-background border border-x-theme-border rounded-md p-5 my-4">
+                <h1 class="text-2xl text-x-theme-text-active">
+                    Welcome, <%- user.username %>!
+                </h1>
+            </div>
+
+            <!-- Change Log -->
+            <div class="w-2/3 h-2/3 bg-x-theme-popup-background border border-x-theme-border rounded-xl overflow-x-auto">
+
+                <!-- Header -->
+                <div class="h-1/6 w-full flex items-center px-8">
+                    <h1 class="text-xl text-x-theme-text-active w-1/2"> Change Log </h1>
+
+                    <form action="/dash/home" method="GET" class="w-full flex justify-end">
+                        <input
+                            type="text"
+                            name="search"
+                            class="bg-x-theme-mini-popup-background border border-x-theme-border text-x-theme-text-base px-2 py-1.5 rounded-md text-xs outline-none w-1/2"
+                            placeholder="Search for update..."
+                        >
+                            
+                        <button type="submit" class="text-xs bg-x-theme-buttons text-x-theme-text-active mx-4 px-2 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Search </button>
+                    </form>
+
+                    <% if (user.permission.toLowerCase() === "dev") { %>
+                    <button onclick="toggleAddChange();" class="text-xs bg-x-theme-buttons text-x-theme-text-active mr-4 px-2 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Add </button>
+                    <% } %>
+                </div>
+
+                <!-- List of Changes -->
+                <ul class="w-full h-fit divide-y divide-x-theme-border">
+                    <% for (const change of changeLog) { %>
+                        <li class="p-5 hover:bg-x-theme-mini-popup-background">
+                            <div class="flex items-center justify-between w-full pr-8 pl-3">
+                                <h2 class="text-x-theme-text-active text-lg hover:underline"><%- change.title %></h2>
+                                <h3 class="text-x-theme-text-base text-sm"><%- change.date %></h3>
+                            </div>
+                            <p class="text-x-theme-text-base py-2 text-base w-full pr-8 pl-3"><%- change.description %></p>
+                        </li>
+                    <% } %> 
+
+
+                    <!-- Add Change Menu -->
+                    <li id="TEMP_CHANGE" class="hidden p-5 hover:bg-x-theme-mini-popup-background">
+                        <form action="/dash/logChange" method="POST" class="flex flex-col gap-y-5 w-full pr-8 pl-3">
+                            <input type="text" name="title" class="text-x-theme-text-active text-lg bg-x-theme-border rounded-md px-2 py-1 w-1/2 outline-none" placeholder="Enter title...">
+                            <input type="text" name="description" class="text-x-theme-text-active text-base bg-x-theme-border rounded-md px-2 py-1 w-full outline-none" placeholder="Enter description...">
+                            <button type="submit" class="text-xs bg-x-theme-buttons text-x-theme-text-active w-fit mr-4 px-2 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-border hover:border-x-theme-border transition-all duration-300 outline-none"> Log Change </button>
+                        </form>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
 
     </div>
     
+
+    <% if (user.permission.toLowerCase() === "dev") { %>
+        <script>
+            function toggleAddChange ()
+            {
+                const element = document.getElementById("TEMP_CHANGE");
+
+                element.classList.contains("hidden") ? element.classList.remove("hidden") : element.classList.add("hidden");
+            }
+
+        </script>
+    <% } %>
 
 
     <!-- Icon imports -->
