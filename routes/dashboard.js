@@ -1,7 +1,7 @@
 // Dependencies
 const bodyParser = require("body-parser");
 const { Router, static } = require("express");
-const { database } = require("../model/database");
+const { database, updateDatabase } = require("../model/database");
 
 // Create router
 const router = Router();
@@ -29,6 +29,9 @@ router.get("/", (req, res) => {
             } else {
                 // Convert result data into change log array
                 const changeLog = result.rows;
+
+                // Sort update log in descending order
+                changeLog.sort((a, b) => b.date - a.date);
 
                 // Format time stamp
                 for (let i = 0; i < changeLog.length; i++) {
@@ -64,7 +67,7 @@ router.post("/logChange", (req, res) => {
         const { title, description } = req.body;
         
         // SQL
-        const SQL = "INSERT INTO changeLog ('title', 'description') VALUES ($1, $2);";
+        const SQL = "INSERT INTO changeLog (title, description) VALUES ($1, $2);";
         const args = [ title, description ];
 
         // Update database
