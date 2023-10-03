@@ -11,9 +11,12 @@ router.use(static("public"));
 router.use(bodyParser.urlencoded({ extended: false }));
 
 // '/' : load home dashboard
-router.get("/", (req, res) => {
+router.get("/home", (req, res) => {
     // Get user object from session
     const user = req.session.user;
+
+    // Get search query from request
+    const searchQuery = req.query.search;
 
     // Ensure user is logged in 
     if (user) {
@@ -28,7 +31,10 @@ router.get("/", (req, res) => {
                 res.status(404).render("dashboard/home", { user, changeLog: [] });
             } else {
                 // Convert result data into change log array
-                const changeLog = result.rows;
+                let changeLog = result.rows;
+
+                // Filter searches
+                if (searchQuery) changeLog = changeLog.filter(change => change.title.toLowerCase().includes(searchQuery.toLowerCase()) || change.description.toLowerCase().includes(searchQuery.toLowerCase()));
 
                 // Sort update log in descending order
                 changeLog.sort((a, b) => b.date - a.date);
@@ -57,7 +63,7 @@ router.get("/", (req, res) => {
 });
 
 // '/logChange' : Add a new change to the change log
-router.post("/logChange", (req, res) => {
+router.post("/home/logChange", (req, res) => {
     // Get user object from session
     const user = req.session.user;
 
