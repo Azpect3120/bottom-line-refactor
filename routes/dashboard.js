@@ -73,18 +73,18 @@ router.post("/home/logChange", (req, res) => {
         const { title, description } = req.body;
         
         // SQL
-        const SQL = "INSERT INTO changeLog (title, description) VALUES ($1, $2);";
+        const query = "INSERT INTO changeLog (title, description) VALUES ($1, $2);";
         const args = [ title, description ];
 
         // Update database
-        database.query(SQL, args, (err, result) => {
+        database.query(query, args, (err, result) => {
             // Error
             if (err) {
                 console.error("Error updating change log", err);
-                res.status(500).render("dashboard/home", { user, changeLog: [] });
+                res.status(500).redirect("/dash/home");
             } else {
-                updateDatabase(req.session.user.id, "changeLog", query, args, result);
-                res.status(301).redirect("/dash");
+                updateDatabase(user.id, "changeLog", query, args, result);
+                res.status(301).redirect("/dash/home");
             }
         });
 
