@@ -31,6 +31,7 @@ const dashboardRoutes = require("./routes/dashboard");
 const accountRoutes = require("./routes/accounts");
 const devPortalRoutes = require("./routes/devPortal");
 const settingsRoutes = require("./routes/settings");
+const workloadRoutes = require("./routes/workloads");
 
 
 // Mount external routes
@@ -39,6 +40,7 @@ app.use("/dash", dashboardRoutes);
 app.use("/dash", accountRoutes);
 app.use("/dash", devPortalRoutes);
 app.use("/dash", settingsRoutes);
+app.use("/dash", workloadRoutes);
 
 // Redirect from blank to login page
 app.get("/", (req, res) => {
