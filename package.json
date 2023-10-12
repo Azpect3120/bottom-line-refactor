@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon app.js",
     "css": "npx tailwindcss -i .\\public\\styles\\config.css -o .\\public\\styles\\main.css --watch",
-    "css-wsl": "npx tailwindcss -i ./public/styles/config.css -o ./public/styles/main.css --watch"
+    "css-linux": "npx tailwindcss -i ./public/styles/config.css -o ./public/styles/main.css --watch"
   },
   "keywords": [],
   "author": "",
