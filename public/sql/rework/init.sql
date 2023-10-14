@@ -1,6 +1,7 @@
 CREATE TYPE permission as ENUM ('Dev', 'Admin', 'User');
+CREATE TYPE frequency as ENUM ('Monthly', 'Quarterly', 'Annually');
+CREATE TYPE completed as ENUM ('checked', 'not-checked');
 
--- DROP TABLE users;
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     username VARCHAR(255),
@@ -34,4 +35,24 @@ CREATE TABLE IF NOT EXISTS updates (
     statement VARCHAR(255), -- INSERT INTO clients ...
     arguments VARCHAR(255), -- arg1, arg2 (array joined to string)
     FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS salesTaxWorkload (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    client_id UUID,
+    year VARCHAR(16),
+    frequency frequency,
+    jan completed,
+    feb completed,
+    mar completed,
+    apr completed,
+    may completed,
+    jun completed,
+    jul completed,
+    aug completed,
+    sep completed,
+    oct completed,
+    nov completed,
+    dec completed,
+    FOREIGN KEY (client_id) REFERENCES clients(id)
 );

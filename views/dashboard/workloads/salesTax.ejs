@@ -19,10 +19,11 @@
 
             <!-- Page Content -->
             <div class="w-11/12 h-5/6 bg-x-theme-popup-background border border-x-theme-border rounded-xl">
+
                <!-- Header  -->
                 <div class="h-1/6 w-full flex items-center px-8">
                     <!-- Update to hold current year -->
-                    <h1 class="text-2xl text-x-theme-text-active w-1/3"> Sales Tax Workload (2023) </h1>
+                    <h1 class="text-2xl text-x-theme-text-active w-1/3"> Sales Tax Workload (<%- data.selected_year %>) </h1>
 
                     <form action="" method="GET" class="w-2/3 flex justify-end">
                         <input
@@ -33,16 +34,14 @@
                         >
                             
                         <select name="year" class="bg-x-theme-buttons rounded-md text-xs text-x-theme-text-active py-1.5 px-2 ml-4">
-                            <option value="2023"> 2023 </option>
-                            <option value="2022"> 2022 </option>
-                            <option value="2021"> 2021 </option>
-                            <option value="2020"> 2020 </option>
-                            <option value="2019"> 2019 </option>
-                            <option value="2018"> 2018 </option>
+                            <% for (let i = data.current_year; i >= 2018; i--) { %>
+                                <option value="<%- i %>" <%- (data.selected_year == i) ? 'selected' : '' %>> <%- i %> </option>
+                            <% } %>
                         </select>
 
                         <button type="submit" class="text-xs bg-x-theme-buttons text-x-theme-text-active mx-4 px-2 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Search </button>
                     </form>
+                    <button onclick="toggleAddMenu();" class="text-xs bg-x-theme-buttons text-x-theme-text-active mr-4 px-2 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Add </button>
                </div>
                
                <!-- Main Table -->
@@ -66,62 +65,67 @@
                             <th class="pb-4 pr-5"> Update </th>
                         </tr>
                         
-                        <% for (let i = 0; i < 20; i++) { %>
+                        <% for (const client of data.clients) { %>
                         <form action="/dash/workloads/sales-tax/update" method="POST">
                             <tr class="text-x-theme-text-base border-y border-x-theme-border hover:bg-x-theme-mini-popup-background">
-                                <td class="text-left pl-8 py-4"> Arrowhead Chlorination </td>
-                                <td class="text-center"> Quarterly </td>
+                                <td class="text-left pl-8 py-4"> <%- client.name %> </td>
 
-                                <input type="hidden" name="id" value="client_id" />
+                                <td onclick="toggleFrequency('<%- client.client_id %>_freq');" id="<%- client.client_id %>_freq" class="text-center cursor-pointer select-none"> 
+                                    <p> <%- client.frequency %> </p>
+                                    <input type="hidden" name="frequency" value="<%- client.frequency %>" />
+                                </td>
+
+                                <input type="hidden" name="id" value="<%- client.id %>" />
+                                <input type="hidden" name="client_id" value="<%- client.client_id %>" />
                                 <input type="hidden" name="year" value="2023" />
 
-                                <td onclick="toggleCheckmark('client_id_jan');" class="text-center"> 
-                                    <ion-icon id="client_id_jan" name="checkmark-sharp"></ion-icon> 
-                                    <input type="hidden" id="client_id_jan_input" name="jan" value="checked" />
+                                <td onclick="toggleCheckmark('<%- client.client_id %>_jan');" class="text-center cursor-pointer"> 
+                                    <ion-icon id="<%- client.client_id %>_jan" name="checkmark-sharp" class="<%- (client.jan !== 'checked') ? 'hidden' : '' %>"></ion-icon> 
+                                    <input type="hidden" id="<%- client.client_id %>_jan_input" name="jan" value="<%- client.jan %>" />
                                 </td>
-                                <td onclick="toggleCheckmark('client_id_feb');" class="text-center"> 
-                                    <ion-icon id="client_id_feb" name="checkmark-sharp" class="hidden"></ion-icon> 
-                                    <input type="hidden" id="client_id_feb_input" name="feb" value="not-checked" />
+                                <td onclick="toggleCheckmark('<%- client.client_id %>_feb');" class="text-center cursor-pointer"> 
+                                    <ion-icon id="<%- client.client_id %>_feb" name="checkmark-sharp" class="<%- (client.feb !== 'checked') ? 'hidden' : '' %>" class="hidden"></ion-icon> 
+                                    <input type="hidden" id="<%- client.client_id %>_feb_input" name="feb" value="<%- client.feb %>" />
                                 </td>
-                                <td onclick="toggleCheckmark('client_id_mar');" class="text-center"> 
-                                    <ion-icon id="client_id_mar" name="checkmark-sharp"></ion-icon> 
-                                    <input type="hidden" id="client_id_mar_input" name="mar" value="checked" />
+                                <td onclick="toggleCheckmark('<%- client.client_id %>_mar');" class="text-center cursor-pointer"> 
+                                    <ion-icon id="<%- client.client_id %>_mar" name="checkmark-sharp" class="<%- (client.mar !== 'checked') ? 'hidden' : '' %>"></ion-icon> 
+                                    <input type="hidden" id="<%- client.client_id %>_mar_input" name="mar" value="<%- client.mar %>" />
                                 </td>
-                                <td onclick="toggleCheckmark('client_id_apr');" class="text-center"> 
-                                    <ion-icon id="client_id_apr" name="checkmark-sharp"></ion-icon> 
-                                    <input type="hidden" id="client_id_apr_input" name="apr" value="checked" />
+                                <td onclick="toggleCheckmark('<%- client.client_id %>_apr');" class="text-center cursor-pointer"> 
+                                    <ion-icon id="<%- client.client_id %>_apr" name="checkmark-sharp" class="<%- (client.apr !== 'checked') ? 'hidden' : '' %>"></ion-icon> 
+                                    <input type="hidden" id="<%- client.client_id %>_apr_input" name="apr" value="<%- client.apr %>" />
                                 </td>
-                                <td onclick="toggleCheckmark('client_id_may');" class="text-center"> 
-                                    <ion-icon id="client_id_may" name="checkmark-sharp"></ion-icon> 
-                                    <input type="hidden" id="client_id_may_input" name="may" value="checked" />
+                                <td onclick="toggleCheckmark('<%- client.client_id %>_may');" class="text-center cursor-pointer"> 
+                                    <ion-icon id="<%- client.client_id %>_may" name="checkmark-sharp" class="<%- (client.may !== 'checked') ? 'hidden' : '' %>"></ion-icon> 
+                                    <input type="hidden" id="<%- client.client_id %>_may_input" name="may" value="<%- client.may %>" />
                                 </td>
-                                <td onclick="toggleCheckmark('client_id_jun');" class="text-center"> 
-                                    <ion-icon id="client_id_jun" name="checkmark-sharp"></ion-icon> 
-                                    <input type="hidden" id="client_id_jun_input" name="jun" value="checked" />
+                                <td onclick="toggleCheckmark('<%- client.client_id %>_jun');" class="text-center cursor-pointer"> 
+                                    <ion-icon id="<%- client.client_id %>_jun" name="checkmark-sharp" class="<%- (client.jun !== 'checked') ? 'hidden' : '' %>"></ion-icon> 
+                                    <input type="hidden" id="<%- client.client_id %>_jun_input" name="jun" value="<%- client.jun %>" />
                                 </td>
-                                <td onclick="toggleCheckmark('client_id_jul');" class="text-center"> 
-                                    <ion-icon id="client_id_jul" name="checkmark-sharp"></ion-icon> 
-                                    <input type="hidden" id="client_id_jul_input" name="jul" value="checked" />
+                                <td onclick="toggleCheckmark('<%- client.client_id %>_jul');" class="text-center cursor-pointer"> 
+                                    <ion-icon id="<%- client.client_id %>_jul" name="checkmark-sharp" class="<%- (client.jul !== 'checked') ? 'hidden' : '' %>"></ion-icon> 
+                                    <input type="hidden" id="<%- client.client_id %>_jul_input" name="jul" value="<%- client.jul %>" />
                                 </td>
-                                <td onclick="toggleCheckmark('client_id_aug');" class="text-center"> 
-                                    <ion-icon id="client_id_aug" name="checkmark-sharp"></ion-icon> 
-                                    <input type="hidden" id="client_id_aug_input" name="aug" value="checked" />
+                                <td onclick="toggleCheckmark('<%- client.client_id %>_aug');" class="text-center cursor-pointer"> 
+                                    <ion-icon id="<%- client.client_id %>_aug" name="checkmark-sharp" class="<%- (client.aug !== 'checked') ? 'hidden' : '' %>"></ion-icon> 
+                                    <input type="hidden" id="<%- client.client_id %>_aug_input" name="aug" value="<%- client.aug %>" />
                                 </td>
-                                <td onclick="toggleCheckmark('client_id_sep');" class="text-center"> 
-                                    <ion-icon id="client_id_sep" name="checkmark-sharp"></ion-icon> 
-                                    <input type="hidden" id="client_id_sep_input" name="sep" value="checked" />
+                                <td onclick="toggleCheckmark('<%- client.client_id %>_sep');" class="text-center cursor-pointer"> 
+                                    <ion-icon id="<%- client.client_id %>_sep" name="checkmark-sharp" class="<%- (client.sep !== 'checked') ? 'hidden' : '' %>"></ion-icon> 
+                                    <input type="hidden" id="<%- client.client_id %>_sep_input" name="sep" value="<%- client.sep %>" />
                                 </td>
-                                <td onclick="toggleCheckmark('client_id_oct');" class="text-center"> 
-                                    <ion-icon id="client_id_oct" name="checkmark-sharp"></ion-icon> 
-                                    <input type="hidden" id="client_id_oct_input" name="oct" value="checked" />
+                                <td onclick="toggleCheckmark('<%- client.client_id %>_oct');" class="text-center cursor-pointer"> 
+                                    <ion-icon id="<%- client.client_id %>_oct" name="checkmark-sharp" class="<%- (client.oct !== 'checked') ? 'hidden' : '' %>"></ion-icon> 
+                                    <input type="hidden" id="<%- client.client_id %>_oct_input" name="oct" value="<%- client.oct %>" />
                                 </td>
-                                <td onclick="toggleCheckmark('client_id_nov');" class="text-center"> 
-                                    <ion-icon id="client_id_nov" name="checkmark-sharp"></ion-icon> 
-                                    <input type="hidden" id="client_id_nov_input" name="nov" value="checked" />
+                                <td onclick="toggleCheckmark('<%- client.client_id %>_nov');" class="text-center cursor-pointer"> 
+                                    <ion-icon id="<%- client.client_id %>_nov" name="checkmark-sharp" class="<%- (client.nov !== 'checked') ? 'hidden' : '' %>"></ion-icon> 
+                                    <input type="hidden" id="<%- client.client_id %>_nov_input" name="nov" value="<%- client.nov %>" />
                                 </td>
-                                <td onclick="toggleCheckmark('client_id_dec');" class="text-center"> 
-                                    <ion-icon id="client_id_dec" name="checkmark-sharp"></ion-icon> 
-                                    <input type="hidden" id="client_id_dec_input" name="dec" value="checked" />
+                                <td onclick="toggleCheckmark('<%- client.client_id %>_dec');" class="text-center cursor-pointer"> 
+                                    <ion-icon id="<%- client.client_id %>_dec" name="checkmark-sharp" class="<%- (client.dec !== 'checked') ? 'hidden' : '' %>"></ion-icon> 
+                                    <input type="hidden" id="<%- client.client_id %>_dec_input" name="dec" value="<%- client.dec %>" />
                                 </td>
                                 <td class="text-center pr-5">
                                     <button type="submit" title="Update client" class="text-2xl hover:text-x-theme-text-active transition-all">
@@ -130,7 +134,7 @@
                                 </td>
                             </tr>
                         </form>
-                        <% } %>
+                    <% } %>
                </div>
             </div>
 
@@ -149,6 +153,25 @@
             } else {
                 el.classList.add("hidden");
                 inp.value = "not-checked";
+            }
+        }
+
+        const frequencies = [ "Monthly", "Quarterly", "Annually"];
+
+        function toggleFrequency (id)
+        {
+            const el = document.getElementById(id);
+            const p = el.getElementsByTagName("p")[0];
+            const input = el.getElementsByTagName("input")[0];
+
+            const current = frequencies.indexOf(p.innerText);
+
+            if (current < frequencies.length - 1) {
+                p.innerText = frequencies[current+1];
+                input.value = frequencies[current+1];
+            } else {
+                p.innerText = frequencies[0];
+                input.value = frequencies[0];
             }
         }
     </script>
