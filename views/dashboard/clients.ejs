@@ -34,7 +34,9 @@
                             
                         <button type="submit" class="text-xs bg-x-theme-buttons text-x-theme-text-active ml-4 px-2 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Search </button>
                     </form>
-                    <button onclick="toggleNewClient();" class="text-xs bg-x-theme-buttons text-x-theme-text-active mx-4 px-2 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Add </button>
+                    <% if (user.permission.toLowerCase() === "dev" || user.permission.toLowerCase() === "admin") { %>
+                        <button onclick="toggleNewClient();" class="text-xs bg-x-theme-buttons text-x-theme-text-active mx-4 px-2 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Add </button>
+                    <% } %>
 
                 </div>
 
@@ -48,26 +50,28 @@
 
 
                         <!-- Add Client Row -->
-                        <tr id="NEW_CLIENT_ROW" class="hidden text-x-theme-text-base border-y border-x-theme-border hover:bg-x-theme-mini-popup-background">
-                            <form action="/dash/accounts/add/client" method="POST">
-                                <td class="px-8 py-2">
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        placeholder="Enter new client name..."
-                                        class="bg-x-theme-border outline-none w-2/3 px-2 py-1 rounded-md"    
-                                    >
-                                </td>
-                                <td class="px-8 py-2 text-2xl flex items-center justify-center">
-                                    <button type="submit">
-                                        <ion-icon name="add" class="p-1 hover:text-x-theme-text-active transition-all" title="Add client"></ion-icon>
-                                    </button>
-                                    <button type="button" onclick="toggleNewClient();">
-                                        <ion-icon name="close" class="p-1 hover:text-x-theme-text-active transition-all" title="Cancel"></ion-icon>
-                                    </button>
-                                </td>
-                            </form>
-                        </tr>
+                        <% if (user.permission.toLowerCase() === "dev" || user.permission.toLowerCase() === "admin") { %>
+                            <tr id="NEW_CLIENT_ROW" class="hidden text-x-theme-text-base border-y border-x-theme-border hover:bg-x-theme-mini-popup-background">
+                                <form action="/dash/accounts/add/client" method="POST">
+                                    <td class="px-8 py-2">
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            placeholder="Enter new client name..."
+                                            class="bg-x-theme-border outline-none w-2/3 px-2 py-1 rounded-md"    
+                                        >
+                                    </td>
+                                    <td class="px-8 py-2 text-2xl flex items-center justify-center">
+                                        <button type="submit">
+                                            <ion-icon name="add" class="p-1 hover:text-x-theme-text-active transition-all" title="Add client"></ion-icon>
+                                        </button>
+                                        <button type="button" onclick="toggleNewClient();">
+                                            <ion-icon name="close" class="p-1 hover:text-x-theme-text-active transition-all" title="Cancel"></ion-icon>
+                                        </button>
+                                    </td>
+                                </form>
+                            </tr>
+                        <% } %>
 
                         <!-- Client List Display -->
                         <% for (const client of clients) { %>
