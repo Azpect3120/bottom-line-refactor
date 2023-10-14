@@ -32,8 +32,10 @@
                             placeholder="Search for client..."
                         >
                             
-                        <button type="submit" class="text-xs bg-x-theme-buttons text-x-theme-text-active mx-4 px-2 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Search </button>
+                        <button type="submit" class="text-xs bg-x-theme-buttons text-x-theme-text-active ml-4 px-2 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Search </button>
                     </form>
+                    <button onclick="toggleNewClient();" class="text-xs bg-x-theme-buttons text-x-theme-text-active mx-4 px-2 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Add </button>
+
                 </div>
 
                 <!-- Client Table -->
@@ -43,6 +45,31 @@
                             <th class="text-left px-8 pb-4"> Client Name </th>
                             <th class="pb-4 text-center w-1/5"> Actions</th>
                         </tr>
+
+
+                        <!-- Add Client Row -->
+                        <tr id="NEW_CLIENT_ROW" class="hidden text-x-theme-text-base border-y border-x-theme-border hover:bg-x-theme-mini-popup-background">
+                            <form action="/dash/accounts/add/client" method="POST">
+                                <td class="px-8 py-2">
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        placeholder="Enter new client name..."
+                                        class="bg-x-theme-border outline-none w-2/3 px-2 py-1 rounded-md"    
+                                    >
+                                </td>
+                                <td class="px-8 py-2 text-2xl flex items-center justify-center">
+                                    <button type="submit">
+                                        <ion-icon name="add" class="p-1 hover:text-x-theme-text-active transition-all" title="Add client"></ion-icon>
+                                    </button>
+                                    <button type="button" onclick="toggleNewClient();">
+                                        <ion-icon name="close" class="p-1 hover:text-x-theme-text-active transition-all" title="Cancel"></ion-icon>
+                                    </button>
+                                </td>
+                            </form>
+                        </tr>
+
+                        <!-- Client List Display -->
                         <% for (const client of clients) { %>
                             <tr id="<%- client.id %>" class="text-x-theme-text-base border-y border-x-theme-border hover:bg-x-theme-mini-popup-background">
                                 <td class="px-8 py-2">
@@ -100,6 +127,16 @@
         function confirmDelete ()
         {
             return window.confirm("Are you sure you want to delete ths client?");
+        }
+
+        function toggleNewClient ()
+        {
+            const element = document.getElementById("NEW_CLIENT_ROW");
+            if (element.classList.contains("hidden")) {
+                element.classList.remove("hidden");
+            } else {
+                element.classList.add("hidden");
+            }
         }
     </script>
 
