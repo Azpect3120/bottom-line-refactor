@@ -33,7 +33,7 @@
                             placeholder="Search for client..."
                         >
                             
-                        <select name="year" class="bg-x-theme-buttons rounded-md text-xs text-x-theme-text-active py-1.5 px-2 ml-4">
+                        <select onchange="updateDate();" name="year" id="yearDropdown" class="bg-x-theme-buttons rounded-md text-xs text-x-theme-text-active py-1.5 px-2 ml-4">
                             <% for (let i = data.current_year; i >= 2018; i--) { %>
                                 <option value="<%- i %>" <%- (data.selected_year == i) ? 'selected' : '' %>> <%- i %> </option>
                             <% } %>
@@ -41,7 +41,7 @@
 
                         <button type="submit" class="text-xs bg-x-theme-buttons text-x-theme-text-active mx-4 px-2 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Search </button>
                     </form>
-                    <button onclick="toggleAddMenu();" class="text-xs bg-x-theme-buttons text-x-theme-text-active mr-4 px-2 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Add </button>
+                    <button class="text-xs bg-x-theme-buttons text-x-theme-text-active mr-4 px-2 py-1.5 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Add </button>
                </div>
                
                <!-- Main Table -->
@@ -173,6 +173,18 @@
                 p.innerText = frequencies[0];
                 input.value = frequencies[0];
             }
+        }
+        
+        function updateDate ()
+        {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            if (typeof urlParams.search == "undefined") urlParams.search = "";
+
+            const newYear = document.getElementById("yearDropdown").value;
+
+            const path = `${window.location.pathname}?search=${urlParams.search}&year=${newYear}`;
+            window.location.href = path;
         }
     </script>
     
