@@ -88,6 +88,7 @@ router.get("/workloads/sales-tax", (req, res) => {
                 res.status(500).render("dashboard/workloads/salesTax", { user, data, clients });
             } else {
                 data.clients = search != "" ? result.rows.filter(client => client.name.includes(search)) : result.rows;
+                data.clients = data.clients.sort((a, b) => a.name.localeCompare(b.name));
                 res.status(200).render("dashboard/workloads/salesTax", { user, data, clients });
             }
         });
