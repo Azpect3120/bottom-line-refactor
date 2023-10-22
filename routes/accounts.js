@@ -209,7 +209,7 @@ router.post("/accounts/add/client", (req, res) => {
     if (user) {
         // SQL
         const query = "INSERT INTO clients (name) VALUES ($1);";
-        const args = [ name ];
+        const args = [ name.toLowerCase() ];
 
         // Update database
         database.query(query, args, (err, result) => {
