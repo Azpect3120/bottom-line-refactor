@@ -19,7 +19,7 @@
 
             <!-- New Client Form -->
             <% if (user.permission.toLowerCase() === "dev" || user.permission.toLowerCase() === "admin") { %>
-            <div id="NEW_CLIENT" class="hidden absolute flex-col w-1/3 h-fit z-20 bg-x-theme-popup-background border border-x-theme-border rounded-lg">
+            <div id="NEW_CLIENT" class="hidden absolute flex-col w-1/3 h-fit z-40 bg-x-theme-popup-background border border-x-theme-border rounded-lg">
                 <div class="w-full h-fit flex items-center justify-between">
                     <h1 class="p-4 text-xl text-x-theme-text-active"> Add Client </h1>
                     <button onclick="toggleNewClient();" title="Close menu" class="p-4 text-2xl text-x-theme-text-base hover:text-red-500 transition-all">
@@ -55,6 +55,29 @@
                 </form>
             </div>
             <% } %>
+
+            <!-- Notes Display -->
+            <div id="NOTES_DISPLAY" class="hidden absolute flex-col w-1/3 h-1/2 z-20 bg-x-theme-popup-background border border-x-theme-border rounded-lg">
+                <div class="w-full h-fit p-2 pb-0 flex items-center justify-between">
+                    <h1 class="p-4 text-xl text-x-theme-text-active"> Client Name... </h1>
+                    <button onclick="closeNotes();" title="Close menu" class="p-4 text-2xl text-x-theme-text-base hover:text-red-500 transition-all">
+                        <ion-icon name="close"></ion-icon>
+                    </button>
+                </div>
+
+                <form method="POST" action="/dash/workloads/sales-tax/updateNotes" class="w-full px-10 flex flex-col items-center justify-evenly h-5/6">
+                    <input type="hidden" name="id" value="">
+                    <textarea
+                        <% if (user.permission.toLowerCase() !== "dev" && user.permission.toLowerCase() !== "admin") { %> disabled <% } %> 
+                        name="notes" 
+                        class="resize-none h-2/3 w-full outline-none bg-x-theme-mini-popup-background border-x-theme-border border rounded-lg p-3 text-x-theme-text-base" placeholder="Notes here...">
+                    </textarea>
+
+                    <% if (user.permission.toLowerCase() === "dev" || user.permission.toLowerCase() === "admin") { %>
+                        <button type="submit" class="text-sm bg-x-theme-buttons text-x-theme-text-active px-3 py-2 rounded-md border border-x-theme-buttons hover:bg-x-theme-buttons-active hover:border-x-theme-buttons-active transition-all duration-300 outline-none"> Update </button>
+                    <% } %>
+                </form>
+            </div>
 
             <!-- Page Content -->
             <div class="w-11/12 h-5/6 bg-x-theme-popup-background border border-x-theme-border rounded-xl">
@@ -104,6 +127,7 @@
                             <th class="pb-4"> Oct </th>
                             <th class="pb-4"> Nov </th>
                             <th class="pb-4"> Dec </th>
+                            <th class="pb-4"> Notes </th>
                             <% if (user.permission.toLowerCase() === "dev" || user.permission.toLowerCase() === "admin") { %>
                                 <th class="pb-4 pr-5"> Update </th>
                             <% } %>
@@ -170,6 +194,11 @@
                                 <td onclick="toggleCheckmark('<%- client.client_id %>_dec');" class="text-center cursor-pointer"> 
                                     <ion-icon id="<%- client.client_id %>_dec" name="checkmark-sharp" class="<%- (client.dec !== 'checked') ? 'hidden' : '' %>"></ion-icon> 
                                     <input type="hidden" id="<%- client.client_id %>_dec_input" name="dec" value="<%- client.dec %>" />
+                                </td>
+                                <td class="text-center cursor-pointer">
+                                    <button onclick="displayNotes('<%- client.name %>', '<%- client.client_id %>', '<%- client.notes %>');" type="button" title="View notes" class="text-2xl hover:text-x-theme-text-active transition-all">
+                                        <ion-icon name="document-text"></ion-icon>
+                                    </button
                                 </td>
                                 <% if (user.permission.toLowerCase() === "dev" || user.permission.toLowerCase() === "admin") { %>
                                     <td class="text-center pr-5">
@@ -244,6 +273,24 @@
                 element.classList.remove("flex");
                 element.classList.add("hidden");
             }
+        }
+
+        function closeNotes ()
+        {
+            const element = document.getElementById("NOTES_DISPLAY");
+            element.classList.remove("flex");
+            element.classList.add("hidden");
+        }
+
+        function displayNotes (clientName, clientId, notes)
+        {
+            const element = document.getElementById("NOTES_DISPLAY");
+            element.getElementsByTagName("h1")[0].innerText = clientName;
+            element.getElementsByTagName("textarea")[0].value = notes;
+            element.getElementsByTagName("input")[0].value = clientId;
+
+            element.classList.add("flex");
+            element.classList.remove("hidden");
         }
     </script>
     

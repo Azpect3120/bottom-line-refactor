@@ -89,6 +89,9 @@ router.get("/workloads/sales-tax", (req, res) => {
             } else {
                 data.clients = search != "" ? result.rows.filter(client => client.name.includes(search)) : result.rows;
                 data.clients = data.clients.sort((a, b) => a.name.localeCompare(b.name));
+                data.clients.forEach(client => {
+                    client.notes = client.notes.replace(/(\r\n|\r|\n)/g, '\\n');
+                });
                 res.status(200).render("dashboard/workloads/salesTax", { user, data, clients });
             }
         });
@@ -97,9 +100,7 @@ router.get("/workloads/sales-tax", (req, res) => {
     }
 });
 
-// Sky High Auto
-// a373da8f-19e3-4cac-ab3a-33130829f88c
-
+// '/workloads/sales-tax/update' : Update the clients information
 router.post("/workloads/sales-tax/update", (req, res) => {
     // Get user from session
     const user = req.session.user;
@@ -190,7 +191,39 @@ router.post("/workloads/sales-tax/create", (req, res) => {
             }
         }
     });
+});
 
+// 'workloads/sales-tax/updateNotes' : Updates the notes on a user in the database
+router.post("/workloads/sales-tax/updateNotes", (req, res) => {
+    // Get user from session
+    const user = req.session.user;
+
+    // Ensure user is logged in
+    if (user) {
+        // Get form input
+        const {notes, id} = req.body;
+
+        // SQL
+        const query = "UPDATE salestaxworkload SET notes = $1 WHERE client_id = $2;";
+        const args = [ notes, id ];
+
+        // Update database
+        database.query(query, args, (err, result) => {
+            // Error
+            if (err) {
+                console.error("Error fetching user id", err);
+                res.status(500).redirect("/dash/workloads/sales-tax");
+                return
+            } else {
+                updateDatabase(user.id, "salestaxworkload", query, args, result);
+                res.status(201).redirect("/dash/workloads/sales-tax");
+            }
+        });
+
+        console.log(notes, id);
+    } else {
+        res.status(302).redirect("/login");
+    }
 });
 
 // Export router
