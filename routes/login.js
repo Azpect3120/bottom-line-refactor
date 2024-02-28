@@ -12,6 +12,7 @@ const router = Router();
 
 // '/login/' : Load page
 router.get("/", (req, res) => {
+    console.log("GET /login/");
     res.status(200).render("login/menu");
 });
 

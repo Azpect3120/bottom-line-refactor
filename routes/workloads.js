@@ -90,6 +90,9 @@ router.get("/workloads/sales-tax", (req, res) => {
                 data.clients = search != "" ? result.rows.filter(client => client.name.includes(search)) : result.rows;
                 data.clients = data.clients.sort((a, b) => a.name.localeCompare(b.name));
                 data.clients.forEach(client => {
+                    if (client.notes === null) {
+                        client.notes = "";
+                    }
                     client.notes = client.notes.replace(/(\r\n|\r|\n)/g, '\\n');
                 });
                 res.status(200).render("dashboard/workloads/salesTax", { user, data, clients });
